@@ -18,3 +18,10 @@ __pycache__/
 # OS-generated files
 .DS_Store
 Thumbs.db
+data/
+
+# Project data and generated artifacts
+data/
+
+# Local experimentation notebooks
+notebooks/
