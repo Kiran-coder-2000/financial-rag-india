@@ -46,7 +46,7 @@ ENCODER = tiktoken.encoding_for_model("gpt-4o")
 # token-distribution analysis: 90th percentile across three
 # companies' annual reports sits at 775-1327 tokens, so 1000 keeps
 # ~92% of real tables intact while still bounding the outliers.
-TABLE_SPLIT_THRESHOLD = 1000
+TABLE_SPLIT_THRESHOLD = 2000
 
 # Safety buffer subtracted from the per-table sub-chunk budget on
 # top of the measured heading/context/header overhead, so token
@@ -544,9 +544,25 @@ def chunk_table(
     # is exactly what gets serialized.
     df = pd.read_csv(csv_path, dtype=str, keep_default_na=True)
 
-    if len(df) == 0:
-        logger.info(f"{table_id}: dropping, 0 rows.")
-        return []
+    if len(df.columns) == 0 or len(df) == 0:
+        
+        logger.info(f"{table_id}: empty table "
+                    f"(Heading: {heading}, Page: {table_meta.get('page')}) — emitting empty chunk.")
+        return [
+                _make_table_chunk(
+                                  table_meta,
+                                  text="",
+                                  tokens=0,
+                                  chunk_index=1,
+                                  total_chunks=1,
+                                  split_strategy="empty",
+                                  row_start=0,
+                                  row_end=0,
+                                  is_low_confidence=True,
+                                 )
+                ]
+
+
 
     non_blank_mask = ~df.apply(
         lambda r: all(_is_blank(v) for v in r), axis=1

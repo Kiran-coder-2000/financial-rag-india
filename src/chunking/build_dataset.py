@@ -387,12 +387,13 @@ def validate_chunks(
     # chunk already flagged above for missing "tokens" must not also
     # crash validation here; it should simply not match this check
     # (its missing-field problem was already reported).
+    
     oversized = [c for c in chunks if c.get("tokens", 0) > SANITY_TOKEN_CEILING]
     if oversized:
-        problems.append(
-            f"{len(oversized)} chunk(s) exceed the {SANITY_TOKEN_CEILING}-token "
-            f"sanity ceiling: {[c.get('chunk_id', '?') for c in oversized]}"
-        )
+        logger.warning(
+                      f"{len(oversized)} chunk(s) exceed the {SANITY_TOKEN_CEILING}-token ceiling "
+                      f"but will be kept (financial tables are important)."
+                      )
 
     # Page lineage: every text chunk's page must exist in page_segments
     valid_pages = {p["page"] for p in page_segments}

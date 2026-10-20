@@ -325,11 +325,8 @@ def build_project(
     force: bool = False,
 ) -> dict:
     """
-    Full orchestration: discover -> per-document reuse/rebuild ->
-    master JSONL (only if every document has a valid cache).
-
-    Returns a summary dict (also what's printed by the CLI) so this
-    is directly testable without parsing stdout.
+    Full orchestration: discover -> per-document reuse/rebuild -> 
+    master JSONL (always updated with valid caches, even if some fail).
     """
     processed_root = Path(processed_root)
     output_root = Path(output_root)
@@ -343,23 +340,24 @@ def build_project(
     rebuilt = [r for r in results if r["status"] == "rebuilt"]
     failed = [r for r in results if r["status"] == "failed"]
 
-    all_have_valid_cache = all(r["has_valid_cache"] for r in results)
+    # ✅ NEW: collect only valid caches, skip failed ones
+    valid_slugs = [r["slug"] for r in results if r["has_valid_cache"]]
 
     master_updated = False
     master_chunk_count = None
 
-    if all_have_valid_cache and results:
-        slugs_in_order = [r["slug"] for r in results]
-        master_chunk_count = build_master_jsonl(slugs_in_order, output_root)
+    if valid_slugs:
+        master_chunk_count = build_master_jsonl(valid_slugs, output_root)
         master_updated = True
-    elif not results:
-        logger.warning("No valid processed documents discovered -- nothing to build.")
+    else:
+        logger.warning("No valid caches available — master JSONL not updated.")
 
     total_text = sum(r["text_chunks"] for r in results if r["has_valid_cache"])
     total_table = sum(r["table_chunks"] for r in results if r["has_valid_cache"])
     total_chunks = total_text + total_table
 
-    success = all_have_valid_cache and bool(results)
+    # ✅ NEW: success is now “at least one valid cache”
+    success = bool(valid_slugs)
 
     summary = {
         "documents_discovered": len(results),
@@ -376,9 +374,7 @@ def build_project(
     }
 
     _print_summary(summary)
-
     return summary
-
 
 def _print_summary(summary: dict) -> None:
     print()

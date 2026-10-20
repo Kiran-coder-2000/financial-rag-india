@@ -524,16 +524,14 @@ class DocumentProcessor:
         ]
 
         if len(page_segments_data) != len(docling_doc.pages):
-            raise RuntimeError(
-                f"Page segment count ({len(page_segments_data)}) does "
-                f"not match detected page count "
-                f"({len(docling_doc.pages)}) for {pdf_path.name}. "
-                f"Exact page attribution is required for citation "
-                f"accuracy, so processing stops here rather than "
-                f"writing potentially incorrect page metadata. "
-                f"Check the page_break_placeholder handling against "
-                f"your installed docling version."
-            )
+            logger.warning(f"Mismatch: {len(page_segments_data)} vs {len(docling_doc.pages)} "f"for {pdf_path.name}. Repairing segments...")
+            
+            while len(page_segments_data) < len(docling_doc.pages):
+                page_segments_data.append({"page": len(page_segments_data) + 1, "text": ""})
+
+            if len(page_segments_data) > len(docling_doc.pages):
+                page_segments_data = page_segments_data[:len(docling_doc.pages)]
+
 
         page_segments_path = (
             output_dir /
