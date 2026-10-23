@@ -1,5 +1,7 @@
 import hashlib
+import csv
 import json
+import logging
 import sys
 from pathlib import Path
 
@@ -110,8 +112,8 @@ class FakeClient:
         return collection
 
 
-def _ingest_args(tmp_path, client, **kwargs):
-    chunks_file, embeddings_root = _write_corpus(tmp_path)
+def _ingest_args(tmp_path, client, chunks=None, **kwargs):
+    chunks_file, embeddings_root = _write_corpus(tmp_path, chunks=chunks)
     options = {
         "chunks_file": chunks_file,
         "embeddings_root": embeddings_root,
@@ -171,6 +173,144 @@ def test_ingestion_batches_and_losslessly_preserves_metadata(tmp_path):
         "origin": "fixture",
         "index": 0,
     }
+
+
+@pytest.mark.parametrize("text", [""])
+def test_empty_text_is_skipped_and_audited(tmp_path, text):
+    chunks = _chunks(3)
+    chunks[1]["text"] = text
+    client = FakeClient()
+
+    result = chroma_store.ingest(**_ingest_args(tmp_path, client, chunks=chunks))
+
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    assert result["count"] == 2
+    assert collection.count() == 2
+    audit_path = tmp_path / "embeddings" / "embedding_audit_log.csv"
+    with audit_path.open(encoding="utf-8", newline="") as audit_file:
+        audit_rows = list(csv.DictReader(audit_file))
+    assert len(audit_rows) == 1
+    assert audit_rows[0]["chunk_id"] == "chunk-1"
+    assert audit_rows[0]["stage"] == "chroma_ingestion"
+    assert audit_rows[0]["event"] == "chunk_skipped"
+    assert audit_rows[0]["company"] == "Example Ltd"
+    assert audit_rows[0]["document"] == "Annual Report"
+    assert audit_rows[0]["financial_year"] == "2024-2025"
+    assert audit_rows[0]["page"] == "2"
+    assert audit_rows[0]["section"] == ""
+    assert audit_rows[0]["chunk_type"] == "text"
+    assert audit_rows[0]["reason"] == "empty_or_whitespace_text"
+    assert audit_rows[0]["action"] == "excluded_from_vector_db"
+
+
+def test_whitespace_only_text_is_skipped(tmp_path):
+    chunks = _chunks(3)
+    chunks[1]["text"] = " \t\n "
+    client = FakeClient()
+
+    result = chroma_store.ingest(**_ingest_args(tmp_path, client, chunks=chunks))
+
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    assert result["count"] == 2
+    assert set(collection.records) == {"chunk-0", "chunk-2"}
+
+
+def test_non_string_text_is_skipped_and_audited(tmp_path):
+    chunks = _chunks(3)
+    chunks[1]["text"] = None
+    client = FakeClient()
+
+    result = chroma_store.ingest(**_ingest_args(tmp_path, client, chunks=chunks))
+
+    assert result["count"] == 2
+    audit_path = tmp_path / "embeddings" / "embedding_audit_log.csv"
+    with audit_path.open(encoding="utf-8", newline="") as audit_file:
+        audit_rows = list(csv.DictReader(audit_file))
+    assert audit_rows[0]["chunk_id"] == "chunk-1"
+    assert audit_rows[0]["reason"] == "non_string_text"
+
+
+def test_filtered_chunks_ids_metadata_and_vectors_stay_aligned(tmp_path):
+    chunks = _chunks(4)
+    chunks[1]["text"] = ""
+    chunks[3]["text"] = "   "
+    client = FakeClient()
+
+    result = chroma_store.ingest(**_ingest_args(tmp_path, client, chunks=chunks))
+
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    assert result["count"] == 2
+    assert result["sample_ids"] == ["chunk-0", "chunk-2"]
+    assert collection.records["chunk-0"]["document"] == chunks[0]["text"]
+    assert collection.records["chunk-2"]["document"] == chunks[2]["text"]
+    assert collection.records["chunk-0"]["embedding"][0] == 1
+    assert collection.records["chunk-2"]["embedding"][2] == 1
+    assert json.loads(
+        collection.records["chunk-2"]["metadata"][chroma_store.SOURCE_METADATA_KEY]
+    )["custom"]["index"] == 2
+    assert collection.metadata["source_chunk_count"] == 4
+    assert collection.metadata["ingestion_count"] == 2
+
+
+def test_audit_csv_header_is_written_once_and_rows_append(tmp_path):
+    chunks = _chunks(2)
+    chunks[0]["text"] = ""
+    client = FakeClient()
+    options = _ingest_args(tmp_path, client, chunks=chunks)
+
+    chroma_store.ingest(**options)
+    chroma_store.ingest(**options)
+
+    audit_path = tmp_path / "embeddings" / "embedding_audit_log.csv"
+    with audit_path.open(encoding="utf-8", newline="") as audit_file:
+        rows = list(csv.reader(audit_file))
+    assert rows.count(list(chroma_store.AUDIT_FIELDS)) == 1
+    assert len(rows) == 3
+    assert [row[3] for row in rows[1:]] == ["chunk-0", "chunk-0"]
+
+
+def test_audit_write_failure_is_logged_and_raised(tmp_path, monkeypatch, caplog):
+    def fail_writer(*args, **kwargs):
+        raise RuntimeError("disk failure")
+
+    monkeypatch.setattr(chroma_store.csv, "DictWriter", fail_writer)
+    with caplog.at_level(logging.ERROR):
+        with pytest.raises(chroma_store.ChromaIngestionError, match="disk failure"):
+            chroma_store._audit_skipped_chunks([_chunks(1)[0]], tmp_path / "embeddings")
+
+    assert "Failed to write skipped-chunk audit records" in caplog.text
+
+
+def test_ingestion_reuses_existing_vectors_without_embedding(tmp_path, monkeypatch):
+    chunks = _chunks(3)
+    chunks[1]["text"] = ""
+    client = FakeClient()
+
+    def fail_if_called(*args, **kwargs):
+        raise AssertionError("Ingestion must not regenerate embeddings.")
+
+    monkeypatch.setattr(chroma_store.embeddings, "embed_corpus", fail_if_called)
+    result = chroma_store.ingest(**_ingest_args(tmp_path, client, chunks=chunks))
+
+    assert result["count"] == 2
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    assert collection.records["chunk-2"]["embedding"][2] == 1
+
+
+def test_no_valid_text_chunks_raises_after_auditing(tmp_path):
+    chunks = _chunks(2)
+    chunks[0]["text"] = "  "
+    chunks[1]["text"] = None
+    client = FakeClient()
+    options = _ingest_args(tmp_path, client, chunks=chunks)
+
+    with pytest.raises(chroma_store.ChromaIngestionError, match="No chunks with non-empty string text"):
+        chroma_store.ingest(**options)
+
+    assert client.collections == {}
+    audit_path = tmp_path / "embeddings" / "embedding_audit_log.csv"
+    with audit_path.open(encoding="utf-8", newline="") as audit_file:
+        assert len(list(csv.DictReader(audit_file))) == 2
 
 
 def test_rerun_upserts_without_duplicate_records(tmp_path):
@@ -235,6 +375,29 @@ def test_verification_rejects_missing_or_extra_collection_ids(tmp_path):
     del collection.records["chunk-0"]
 
     with pytest.raises(chroma_store.ChromaIngestionError, match="count mismatch"):
+        chroma_store.verify(**options)
+
+
+def test_verification_accepts_small_vector_round_trip_drift(tmp_path):
+    client = FakeClient()
+    options = _ingest_args(tmp_path, client)
+    chroma_store.ingest(**options)
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    collection.records["chunk-0"]["embedding"][0] += 1e-8
+
+    result = chroma_store.verify(**options)
+
+    assert result["count"] == 3
+
+
+def test_verification_rejects_material_vector_change(tmp_path):
+    client = FakeClient()
+    options = _ingest_args(tmp_path, client)
+    chroma_store.ingest(**options)
+    collection = client.collections[chroma_store.DEFAULT_COLLECTION_NAME]
+    collection.records["chunk-0"]["embedding"][0] += 1e-3
+
+    with pytest.raises(chroma_store.ChromaIngestionError, match="Embedding vector mismatch"):
         chroma_store.verify(**options)
 
 

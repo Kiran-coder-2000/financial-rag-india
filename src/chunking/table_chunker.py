@@ -548,19 +548,19 @@ def chunk_table(
         
         logger.info(f"{table_id}: empty table "
                     f"(Heading: {heading}, Page: {table_meta.get('page')}) — emitting empty chunk.")
-        return [
-                _make_table_chunk(
-                                  table_meta,
-                                  text="",
-                                  tokens=0,
-                                  chunk_index=1,
-                                  total_chunks=1,
-                                  split_strategy="empty",
-                                  row_start=0,
-                                  row_end=0,
-                                  is_low_confidence=True,
-                                 )
-                ]
+        return []
+        """_make_table_chunk(
+                                          table_meta,
+                                          text="",
+                                          tokens=0,
+                                          chunk_index=1,
+                                          total_chunks=1,
+                                          split_strategy="empty",
+                                          row_start=0,
+                                          row_end=0,
+                                          is_low_confidence=True,
+                                         )
+        """
 
 
 

@@ -1,11 +1,13 @@
 """Persistent ChromaDB ingestion for the existing financial-report corpus."""
 
 import argparse
+import csv
 import hashlib
 import json
 import logging
 import math
 from dataclasses import dataclass
+from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -21,7 +23,22 @@ DEFAULT_COLLECTION_NAME = "financial_reports"
 DEFAULT_BATCH_SIZE = 500
 EXPECTED_DIMENSION = 768
 INGESTION_SCHEMA_VERSION = "1"
+INGESTION_FILTER_VERSION = "non-empty-string-text-v1"
 SOURCE_METADATA_KEY = "_source_metadata_json"
+AUDIT_FIELDS = (
+    "timestamp",
+    "stage",
+    "event",
+    "chunk_id",
+    "company",
+    "document",
+    "financial_year",
+    "page",
+    "section",
+    "chunk_type",
+    "reason",
+    "action",
+)
 REQUIRED_METADATA_FIELDS = (
     "company",
     "document",
@@ -40,6 +57,7 @@ class ChromaIngestionError(ValueError):
 class ValidatedCorpus:
     chunks: list[dict]
     embedding_result: embeddings.EmbeddingResult
+    skipped_chunks: list[dict]
     collection_metadata: dict
 
 
@@ -49,6 +67,42 @@ def _sha256_file(path: Path) -> str:
         for block in iter(lambda: file.read(1 << 16), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _audit_skipped_chunks(skipped_chunks: list[dict], embeddings_root: str | Path) -> None:
+    if not skipped_chunks:
+        return
+
+    audit_path = Path(embeddings_root) / "embedding_audit_log.csv"
+    try:
+        audit_path.parent.mkdir(parents=True, exist_ok=True)
+        write_header = not audit_path.exists() or audit_path.stat().st_size == 0
+        with audit_path.open("a", encoding="utf-8", newline="") as audit_file:
+            writer = csv.DictWriter(audit_file, fieldnames=AUDIT_FIELDS)
+            if write_header:
+                writer.writeheader()
+            for chunk in skipped_chunks:
+                text = chunk.get("text")
+                reason = "empty_or_whitespace_text" if isinstance(text, str) else "non_string_text"
+                writer.writerow({
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "stage": "chroma_ingestion",
+                    "event": "chunk_skipped",
+                    "chunk_id": chunk.get("chunk_id", ""),
+                    "company": chunk.get("company", ""),
+                    "document": chunk.get("document", ""),
+                    "financial_year": chunk.get("financial_year", ""),
+                    "page": chunk.get("page", ""),
+                    "section": chunk.get("section", ""),
+                    "chunk_type": chunk.get("chunk_type", ""),
+                    "reason": reason,
+                    "action": "excluded_from_vector_db",
+                })
+    except Exception as error:
+        logger.exception("Failed to write skipped-chunk audit records to %s", audit_path)
+        raise ChromaIngestionError(
+            f"Could not write skipped-chunk audit records to {audit_path}: {error}"
+        ) from error
 
 
 def load_validated_corpus(
@@ -85,9 +139,6 @@ def load_validated_corpus(
                 raise ChromaIngestionError(
                     f"Chunk at index {index} has missing or invalid required metadata '{field}'."
                 )
-        if not isinstance(chunk.get("text"), str):
-            raise ChromaIngestionError(f"Chunk at index {index} has non-string text.")
-
     source_ids = [chunk["chunk_id"] for chunk in chunks]
     if len(set(source_ids)) != len(source_ids):
         raise ChromaIngestionError("The source chunk file contains duplicate chunk IDs.")
@@ -142,19 +193,44 @@ def load_validated_corpus(
             f"Source chunks use reserved Chroma metadata key {SOURCE_METADATA_KEY!r}."
         )
 
+    retained_indices = [
+        index
+        for index, chunk in enumerate(chunks)
+        if isinstance(chunk.get("text"), str) and bool(chunk["text"].strip())
+    ]
+    retained_index_set = set(retained_indices)
+    skipped_chunks = [
+        chunk for index, chunk in enumerate(chunks) if index not in retained_index_set
+    ]
+    retained_chunks = [chunks[index] for index in retained_indices]
+    filtered_embedding_result = embeddings.EmbeddingResult(
+        chunk_ids=[embedding_result.chunk_ids[index] for index in retained_indices],
+        vectors=vectors[retained_indices],
+        model_name=embedding_result.model_name,
+        model_revision=embedding_result.model_revision,
+        dimension=embedding_result.dimension,
+    )
+
     collection_metadata = {
         "embedding_model_name": embedding_result.model_name,
         "embedding_model_revision": embedding_result.model_revision,
         "embedding_dimension": EXPECTED_DIMENSION,
         "source_chunk_count": len(chunks),
+        "ingestion_count": len(retained_chunks),
         "source_chunks_sha256": source_hash,
         "embedding_vectors_sha256": _sha256_file(embeddings_root / "embeddings.npy"),
         "embedding_ids_sha256": _sha256_file(embeddings_root / "chunk_ids.json"),
         "query_prefix": str(embedding_metadata.get("query_prefix", "")),
         "distance_metric": "cosine",
         "ingestion_schema_version": INGESTION_SCHEMA_VERSION,
+        "ingestion_filter_version": INGESTION_FILTER_VERSION,
     }
-    return ValidatedCorpus(chunks, embedding_result, collection_metadata)
+    return ValidatedCorpus(
+        retained_chunks,
+        filtered_embedding_result,
+        skipped_chunks,
+        collection_metadata,
+    )
 
 
 def _to_chroma_metadata(chunk: dict) -> dict:
@@ -281,7 +357,9 @@ def verify_collection(
             raise ChromaIngestionError(f"Metadata mismatch for sample {chunk_id!r}.")
         actual_vector = np.asarray(result["embeddings"][record_index])
         expected_vector = corpus.embedding_result.vectors[expected_index_by_id[chunk_id]]
-        if actual_vector.shape != expected_vector.shape or not np.array_equal(actual_vector, expected_vector):
+        if actual_vector.shape != expected_vector.shape or not np.allclose(
+            actual_vector, expected_vector, rtol=1e-6, atol=1e-7
+        ):
             raise ChromaIngestionError(f"Embedding vector mismatch for sample {chunk_id!r}.")
 
     return {"count": actual_count, "sample_ids": sample_ids}
@@ -298,6 +376,9 @@ def ingest(
     """Ingest validated existing vectors, preserving IDs and safe rerun behavior."""
     _validate_batch_size(batch_size)
     corpus = load_validated_corpus(chunks_file, embeddings_root)
+    _audit_skipped_chunks(corpus.skipped_chunks, embeddings_root)
+    if not corpus.chunks:
+        raise ChromaIngestionError("No chunks with non-empty string text remain for ingestion.")
     persist_directory = Path(persist_directory)
     persist_directory.mkdir(parents=True, exist_ok=True)
     client = client or _get_client(persist_directory)
@@ -352,6 +433,8 @@ def verify(
 ) -> dict:
     """Reopen the persistent collection and verify its count and sample records."""
     corpus = load_validated_corpus(chunks_file, embeddings_root)
+    if not corpus.chunks:
+        raise ChromaIngestionError("No chunks with non-empty string text remain for verification.")
     client = client or _get_client(persist_directory)
     names = {
         collection if isinstance(collection, str) else collection.name
