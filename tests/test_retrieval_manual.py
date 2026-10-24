@@ -1,43 +1,45 @@
 """
 test_retrieval_manual.py
 
-Manual, interactive inspection tool for the retrieval pipeline --
-NOT a pytest test despite the filename, and NOT part of the
-production retrieval API (per the task: a developer tool only).
+Manual, opt-in inspection tool for the persistent Chroma retriever.
+This file is not part of the automated test suite and never mutates
+the collection.
 
-Run directly from the project root:
+Run from the project root:
 
-    python test_retrieval_manual.py
+    .venv/Scripts/python.exe tests/test_retrieval_manual.py
 
-Loads the real persisted chunk corpus and embeddings, takes a
-question from the terminal, embeds it via the existing
-RetrievalProcessor (which uses embeddings.embed_query() internally
--- the BGE query prefix logic is NOT duplicated here), and prints
-the top-5 results from the existing DenseRetriever for manual
-eyeballing. No LLM answer generation, no vector DB/ANN index.
-
-Paths used (confirmed from source, not guessed):
-    CHUNKS_FILE     = "data/chunks/all_chunks.jsonl"
-        -- embeddings.py's own default `chunks_file` in
-           run_embedding()'s signature; also build.py's documented
-           master-corpus output path.
-    EMBEDDINGS_ROOT = "data/embeddings"
-        -- embeddings.py's own default `output_root` in
-           run_embedding()'s signature.
-
-Requires a completed pipeline run first:
-    python -m src.build
-    python -m src.embeddings
-so both paths above actually exist and correspond to each other --
-RetrievalLoader.load() will raise a clear error if they don't.
+When --query is omitted, the script prompts for a question. Use
+--query for non-interactive runs and --company,
+--financial-year, or --chunk-type for exact stored metadata filters.
 """
 
-from src.retrieval import RetrievalLoader, RetrievalProcessor, DenseRetriever
+import argparse
+import json
+import sys
+from pathlib import Path
 
-CHUNKS_FILE = "data/chunks/all_chunks.jsonl"
-EMBEDDINGS_ROOT = "data/embeddings"
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-EXIT_COMMANDS = {"q", "quit", "exit"}
+from src import query_planner
+from src.embeddings import load_chunks
+from src.hybrid_retrieval import (
+    STRATEGY_PATHS,
+    HybridRetriever,
+    KeywordLexicalRetriever,
+    KeywordSemanticRetriever,
+)
+from src.keyword_store import DEFAULT_KEYWORD_CHROMA_PATH, DEFAULT_LEXICAL_INDEX_PATH, KeywordLexicalIndex
+from src.retrieval import ChromaRetriever, RetrievalProcessor
+from src.retrieval_pipeline import FinancialRetrievalPipeline
+
+CHUNKS_FILE = Path(__file__).resolve().parent.parent / "data" / "chunks" / "all_chunks.jsonl"
+
+
+def _read_query(query: str | None) -> str:
+    if query is not None:
+        return query
+    return input("Question: ").strip()
 
 
 def _print_result(result) -> None:
@@ -49,57 +51,120 @@ def _print_result(result) -> None:
     print(f"Document: {chunk.get('document')}")
     print(f"Financial Year: {chunk.get('financial_year')}")
     print(f"Page: {chunk.get('page')}")
+    print(f"Section: {chunk.get('section')}")
     print(f"Chunk Type: {chunk.get('chunk_type')}")
+    table_metadata = {
+        key: chunk[key]
+        for key in ("table_id", "table_heading", "row_start", "row_end")
+        if key in chunk
+    }
+    if table_metadata:
+        print(f"Table Metadata: {json.dumps(table_metadata, ensure_ascii=False)}")
+    path_evidence = chunk.get("retrieval_path_evidence")
+    if path_evidence:
+        print(f"Retrieval Paths: {json.dumps(path_evidence, ensure_ascii=False)}")
     print()
     print("Text:")
-    print(chunk.get("text"))
+    print(chunk.get("text", ""))
     print()
 
 
 def main() -> None:
-    print(f"Loading chunks from: {CHUNKS_FILE}")
-    print(f"Loading embeddings from: {EMBEDDINGS_ROOT}")
-
-    loader = RetrievalLoader(CHUNKS_FILE, EMBEDDINGS_ROOT)
-    chunks, embedding_result = loader.load()
-
-    print(
-        f"Loaded {len(chunks)} chunks and {embedding_result.vectors.shape[0]} "
-        f"embeddings (dimension {embedding_result.dimension})."
+    parser = argparse.ArgumentParser(description="Query the existing persistent Chroma collection.")
+    parser.add_argument("--query")
+    parser.add_argument("--top-k", type=int, default=10)
+    parser.add_argument("--company")
+    parser.add_argument("--financial-year")
+    parser.add_argument("--chunk-type")
+    parser.add_argument(
+        "--strategy",
+        choices=("baseline", *sorted(STRATEGY_PATHS)),
+        default="baseline",
+        help="baseline is the default; experimental strategies require their separate indexes.",
     )
+    args = parser.parse_args()
+    user_query = _read_query(args.query)
 
-    processor = RetrievalProcessor()
-    retriever = DenseRetriever(chunks, embedding_result)
+    try:
+        registry = query_planner.registry_from_chunks_file(CHUNKS_FILE)
+        planner = query_planner.QueryPlanner(registry=registry)
+        processor = RetrievalProcessor()
+        retriever = ChromaRetriever(processor=processor)
+        experimental_retriever = None
+        if args.strategy != "baseline":
+            chunks = load_chunks(CHUNKS_FILE)
+            source_chunks = {chunk["chunk_id"]: chunk for chunk in chunks}
+            needs_keyword_semantic = "keyword_semantic" in STRATEGY_PATHS[args.strategy]
+            needs_keyword_lexical = "keyword_lexical" in STRATEGY_PATHS[args.strategy]
+            keyword_semantic = None
+            keyword_lexical = None
+            if needs_keyword_semantic:
+                keyword_semantic = KeywordSemanticRetriever(
+                    source_chunks,
+                    processor=processor,
+                    persist_directory=DEFAULT_KEYWORD_CHROMA_PATH,
+                )
+            if needs_keyword_lexical:
+                if not DEFAULT_LEXICAL_INDEX_PATH.is_file():
+                    raise FileNotFoundError(
+                        f"Lexical keyword index is missing at {DEFAULT_LEXICAL_INDEX_PATH}. "
+                        "Run scripts/index_chunk_keywords.py first."
+                    )
+                keyword_lexical = KeywordLexicalRetriever(
+                    KeywordLexicalIndex(DEFAULT_LEXICAL_INDEX_PATH, source_chunks)
+                )
+            experimental_retriever = HybridRetriever(
+                chunk_semantic=retriever,
+                keyword_semantic=keyword_semantic,
+                keyword_lexical=keyword_lexical,
+            )
+        pipeline = FinancialRetrievalPipeline(
+            planner=planner,
+            retriever=retriever,
+            retrieval_strategy=args.strategy,
+            experimental_retriever=experimental_retriever,
+        )
+        result = pipeline.run(
+            user_query,
+            top_k=args.top_k,
+            company=args.company,
+            financial_year=args.financial_year,
+            chunk_type=args.chunk_type,
+        )
+    except (query_planner.QueryPlannerError, ValueError, RuntimeError) as error:
+        print(f"Retrieval pipeline failed: {error}", file=sys.stderr)
+        raise SystemExit(1) from None
 
-    print()
-    print("Enter a question to retrieve the top 5 most similar chunks.")
-    print("Type 'q', 'quit', or 'exit' to stop.")
-    print()
+    print(f"Original question: {result.original_question}")
+    print("Validated query plan:")
+    print(json.dumps(result.plan.model_dump(mode="json"), indent=2, ensure_ascii=False))
+    print(f"\nPipeline status: {result.status}; strategy: {result.retrieval_strategy}")
+    for warning in result.warnings:
+        print(f"Warning: {warning}")
 
-    while True:
-        query = input("Question: ").strip()
-
-        if query.lower() in EXIT_COMMANDS:
-            print("Exiting.")
-            break
-
-        if not query:
-            print("Please enter a question (or 'q' to quit).\n")
+    for task_result in result.task_results:
+        print("\n" + "=" * 72)
+        print(f"Task ID: {task_result.task_id}")
+        print(f"Query: {task_result.query}")
+        print(f"Effective metadata filters: {json.dumps(task_result.filters, ensure_ascii=False)}")
+        if task_result.skipped_reason:
+            print(f"Skipped: {task_result.skipped_reason}")
             continue
-
-        try:
-            query_vector = processor.embed_query(query)
-            results = retriever.search(query_vector, top_k=5)
-        except Exception as e:
-            print(f"Retrieval failed: {e}\n")
+        if task_result.error:
+            print(f"Retrieval error: {task_result.error}")
             continue
+        if not task_result.results:
+            print("No results for this task.")
+            continue
+        for retrieved in task_result.results:
+            print("-" * 72)
+            print(f"Task ID: {task_result.task_id}")
+            _print_result(retrieved)
+    if result.task_results:
+        print("=" * 72)
 
-        print()
-        print("=" * 60)
-        for result in results:
-            _print_result(result)
-        print("=" * 60)
-        print()
+    if result.status == "partial":
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

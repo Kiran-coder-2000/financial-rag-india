@@ -449,3 +449,282 @@ class TestDenseRetrieverUsesVectorizedDotProduct:
         manual_scores = [float(np.dot(v, query)) for v in vectors]
         expected_top_id = f"c{manual_scores.index(max(manual_scores))}"
         assert results[0].chunk_id == expected_top_id
+
+
+class FakeQueryProcessor:
+    def __init__(self):
+        self.queries = []
+        self.vector = np.zeros(768, dtype=np.float32)
+        self.vector[0] = 1.0
+
+    def embed_query(self, query):
+        self.queries.append(query)
+        return self.vector
+
+
+class FakeChromaCollection:
+    def __init__(self, records=None, metadata=None):
+        self.records = records if records is not None else [
+            {
+                "id": "infosys-table-2026",
+                "distance": 0.1,
+                "document": "Consolidated revenue was 178,650 crore.",
+                "metadata": {
+                    "chunk_id": "infosys-table-2026",
+                    "company": "Infosys",
+                    "financial_year": "2025-2026",
+                    "chunk_type": "table",
+                    "page": 33,
+                    "section": "Financial statements",
+                    "table_id": "table-1",
+                    "table_heading": "Revenue",
+                    "row_start": 1,
+                    "row_end": 3,
+                },
+            },
+            {
+                "id": "infosys-text-2025",
+                "distance": 0.25,
+                "document": "Prior year consolidated revenue was 162,990 crore.",
+                "metadata": {
+                    "chunk_id": "infosys-text-2025",
+                    "company": "Infosys",
+                    "financial_year": "2024-2025",
+                    "chunk_type": "text",
+                    "page": 34,
+                    "section": "Revenue",
+                },
+            },
+            {
+                "id": "reliance-text-2026",
+                "distance": 0.3,
+                "document": "Reliance financial results.",
+                "metadata": {
+                    "chunk_id": "reliance-text-2026",
+                    "company": "RelianceIndustries",
+                    "financial_year": "2025-2026",
+                    "chunk_type": "text",
+                    "page": 10,
+                },
+            },
+        ]
+        self.metadata = metadata or {
+            "embedding_dimension": 768,
+            "embedding_model_name": retrieval.embeddings.DEFAULT_MODEL_NAME,
+            "embedding_model_revision": retrieval.embeddings.DEFAULT_MODEL_REVISION,
+            "distance_metric": "cosine",
+        }
+        self.configuration = {"hnsw": {"space": "cosine"}}
+        self.query_calls = []
+        self.get_calls = []
+        self.response_override = None
+        self.use_response_override = False
+
+    @staticmethod
+    def _matches(metadata, where):
+        if not where:
+            return True
+        if "$and" in where:
+            return all(FakeChromaCollection._matches(metadata, item) for item in where["$and"])
+        return all(metadata.get(key) == value for key, value in where.items())
+
+    def count(self):
+        return len(self.records)
+
+    def get(self, where=None, limit=None, include=None, **kwargs):
+        self.get_calls.append({"where": where, "limit": limit, "include": include})
+        matches = [record for record in self.records if self._matches(record["metadata"], where)]
+        if limit is not None:
+            matches = matches[:limit]
+        return {"ids": [record["id"] for record in matches]}
+
+    def query(self, query_embeddings, n_results, include, **kwargs):
+        where = kwargs.get("where")
+        self.query_calls.append({
+            "query_embeddings": query_embeddings,
+            "n_results": n_results,
+            "include": include,
+            "where": where,
+            "where_supplied": "where" in kwargs,
+        })
+        if self.use_response_override:
+            return self.response_override
+        matches = [record for record in self.records if self._matches(record["metadata"], where)]
+        matches = sorted(matches, key=lambda record: record["distance"])[:n_results]
+        return {
+            "ids": [[record["id"] for record in matches]],
+            "distances": [[record["distance"] for record in matches]],
+            "documents": [[record["document"] for record in matches]],
+            "metadatas": [[record["metadata"] for record in matches]],
+        }
+
+
+class FakeChromaClient:
+    def __init__(self, collection=None):
+        self.collection = collection or FakeChromaCollection()
+        self.requested_names = []
+        self.create_calls = []
+
+    def get_collection(self, name, embedding_function=None):
+        self.requested_names.append(name)
+        if name != retrieval.DEFAULT_CHROMA_COLLECTION:
+            raise KeyError(name)
+        return self.collection
+
+    def create_collection(self, *args, **kwargs):
+        self.create_calls.append((args, kwargs))
+        raise AssertionError("Retrieval must never create a collection.")
+
+
+def _build_chroma_retriever(collection=None, client=None):
+    collection = collection or FakeChromaCollection()
+    client = client or FakeChromaClient(collection)
+    processor = FakeQueryProcessor()
+    retriever = retrieval.ChromaRetriever(
+        processor=processor,
+        client=client,
+    )
+    return retriever, processor, client, collection
+
+
+class TestChromaRetrieverInitialization:
+    def test_connects_to_existing_collection(self):
+        retriever, _, client, collection = _build_chroma_retriever()
+
+        assert retriever.collection is collection
+        assert client.requested_names == ["financial_reports_filtered"]
+        assert client.create_calls == []
+
+    def test_missing_collection_fails_without_creating(self):
+        class MissingClient(FakeChromaClient):
+            def get_collection(self, name, embedding_function=None):
+                raise KeyError(name)
+
+        client = MissingClient()
+        with pytest.raises(retrieval.ChromaRetrievalError, match="was not found"):
+            retrieval.ChromaRetriever(processor=FakeQueryProcessor(), client=client)
+        assert client.create_calls == []
+
+    def test_empty_collection_fails(self):
+        collection = FakeChromaCollection(records=[])
+        with pytest.raises(retrieval.ChromaRetrievalError, match="is empty"):
+            retrieval.ChromaRetriever(collection=collection, processor=FakeQueryProcessor())
+
+    @pytest.mark.parametrize(
+        "metadata",
+        [
+            {"embedding_dimension": 384},
+            {"embedding_model_name": "another/model"},
+            {"embedding_model_revision": "another-revision"},
+        ],
+    )
+    def test_incompatible_collection_metadata_fails(self, metadata):
+        collection = FakeChromaCollection(metadata=metadata)
+        with pytest.raises(retrieval.ChromaRetrievalError):
+            retrieval.ChromaRetriever(collection=collection, processor=FakeQueryProcessor())
+
+
+class TestChromaRetrieverSearch:
+    def test_query_embedding_passed_with_expected_dimension_and_top_k(self):
+        retriever, processor, _, collection = _build_chroma_retriever()
+
+        results = retriever.search("  revenue   FY2026 ", top_k=2)
+
+        call = collection.query_calls[0]
+        assert processor.queries == ["  revenue   FY2026 "]
+        assert len(call["query_embeddings"][0]) == 768
+        assert call["n_results"] == 2
+        assert len(results) == 2
+
+    def test_cosine_distance_is_converted_to_similarity(self):
+        retriever, _, _, _ = _build_chroma_retriever()
+
+        results = retriever.search("revenue", top_k=1)
+
+        assert results[0].score == pytest.approx(0.9)
+
+    def test_result_keeps_id_rank_text_and_source_metadata(self):
+        retriever, _, _, _ = _build_chroma_retriever()
+
+        result = retriever.search("revenue", top_k=2)[0]
+
+        assert result.chunk_id == "infosys-table-2026"
+        assert result.rank == 1
+        assert result.chunk["text"] == "Consolidated revenue was 178,650 crore."
+        assert result.chunk["company"] == "Infosys"
+        assert result.chunk["financial_year"] == "2025-2026"
+        assert result.chunk["page"] == 33
+        assert result.chunk["chunk_id"] == result.chunk_id
+        assert result.chunk["table_id"] == "table-1"
+        assert result.chunk["table_heading"] == "Revenue"
+        assert "section" in result.chunk
+
+    @pytest.mark.parametrize(
+        ("filters", "expected_where"),
+        [
+            ({"company": "Infosys"}, {"company": "Infosys"}),
+            ({"financial_year": "2025-2026"}, {"financial_year": "2025-2026"}),
+            ({"chunk_type": "table"}, {"chunk_type": "table"}),
+            (
+                {"company": "Infosys", "financial_year": "2025-2026", "chunk_type": "table"},
+                {"$and": [
+                    {"company": "Infosys"},
+                    {"financial_year": "2025-2026"},
+                    {"chunk_type": "table"},
+                ]},
+            ),
+        ],
+    )
+    def test_metadata_filters_use_exact_stored_values(self, filters, expected_where):
+        retriever, _, _, collection = _build_chroma_retriever()
+
+        retriever.search("revenue", **filters)
+
+        assert collection.query_calls[0]["where"] == expected_where
+
+    def test_invalid_filter_does_not_fall_back_to_unfiltered_query(self):
+        retriever, _, _, collection = _build_chroma_retriever()
+
+        with pytest.raises(ValueError, match="Unsupported financial_year filter"):
+            retriever.search("revenue", financial_year="FY2026")
+
+        assert collection.query_calls == []
+
+    def test_blank_or_non_string_filter_is_rejected(self):
+        retriever, _, _, collection = _build_chroma_retriever()
+
+        for invalid in ("  ", 2026):
+            with pytest.raises(ValueError, match="company filter must be a non-empty string"):
+                retriever.search("revenue", company=invalid)
+        assert collection.query_calls == []
+
+    @pytest.mark.parametrize(
+        "response",
+        [
+            None,
+            {"ids": [["x"]], "distances": [[]], "documents": [[]], "metadatas": [[]]},
+            {"ids": [["x"]], "distances": [[0.1]], "documents": [[None]], "metadatas": [[{}]]},
+        ],
+    )
+    def test_malformed_query_results_raise_clear_error(self, response):
+        retriever, _, _, collection = _build_chroma_retriever()
+        collection.response_override = response
+        collection.use_response_override = True
+
+        with pytest.raises(retrieval.ChromaRetrievalError):
+            retriever.search("revenue")
+
+    def test_no_filter_does_not_pass_where_or_create_records(self):
+        retriever, _, client, collection = _build_chroma_retriever()
+
+        retriever.search("revenue")
+
+        assert not collection.query_calls[0]["where_supplied"]
+        assert client.create_calls == []
+
+    def test_invalid_top_k_rejected(self):
+        retriever, _, _, collection = _build_chroma_retriever()
+
+        with pytest.raises(ValueError, match="positive"):
+            retriever.search("revenue", top_k=0)
+        assert collection.query_calls == []
