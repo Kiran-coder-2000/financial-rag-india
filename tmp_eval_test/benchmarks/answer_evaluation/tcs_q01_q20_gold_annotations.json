@@ -1,0 +1,1 @@
+{"status": "proposed_pending_human_review", "cases": [{"id": "q_with_labels", "proposed_gold": {"expected_assertions": [{"evidence": [{"chunk_id": "chunk-1", "relation": "supports", "verification_status": "proposed_unverified"}]}]}}, {"id": "q_without_labels", "proposed_gold": {"expected_assertions": []}}]}

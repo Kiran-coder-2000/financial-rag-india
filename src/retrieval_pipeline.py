@@ -5,6 +5,16 @@ from dataclasses import dataclass, field
 from . import query_planner
 from .retrieval import ChromaRetriever, RetrievalResult
 
+RETRIEVAL_STRATEGIES = {
+    "baseline",
+    "chunk_semantic",
+    "keyword_semantic",
+    "keyword_lexical",
+    "hybrid_chunk_keyword",
+    "hybrid_chunk_lexical",
+    "hybrid_all",
+}
+
 
 class RetrievalPipelineError(RuntimeError):
     """Raised when a planner result cannot safely drive retrieval."""
@@ -27,14 +37,29 @@ class FinancialRetrievalResult:
     task_results: list[TaskRetrievalResult]
     warnings: list[str]
     status: str
+    retrieval_strategy: str = "baseline"
 
 
 class FinancialRetrievalPipeline:
     """Use the planner's atomic queries and constraints to retrieve evidence."""
 
-    def __init__(self, planner, retriever: ChromaRetriever):
+    def __init__(
+        self,
+        planner,
+        retriever: ChromaRetriever,
+        retrieval_strategy: str = "baseline",
+        experimental_retriever=None,
+    ):
+        if retrieval_strategy not in RETRIEVAL_STRATEGIES:
+            raise ValueError(f"Unknown retrieval strategy {retrieval_strategy!r}.")
+        if retrieval_strategy not in {"baseline", "chunk_semantic"} and experimental_retriever is None:
+            raise RetrievalPipelineError(
+                f"Retrieval strategy {retrieval_strategy!r} requires an experimental retriever."
+            )
         self.planner = planner
         self.retriever = retriever
+        self.retrieval_strategy = retrieval_strategy
+        self.experimental_retriever = experimental_retriever
 
     @staticmethod
     def _validate_top_k(top_k: int) -> None:
@@ -85,7 +110,7 @@ class FinancialRetrievalPipeline:
     def run(
         self,
         user_query: str,
-        top_k: int = 5,
+        top_k: int | None = None,
         company: str | None = None,
         financial_year: str | None = None,
         chunk_type: str | None = None,
@@ -97,6 +122,8 @@ class FinancialRetrievalPipeline:
         Explicit financial years must use the exact metadata form stored by
         Chroma, for example ``2025-2026``.
         """
+        if top_k is None:
+            top_k = 5 if self.retrieval_strategy == "baseline" else 10
         self._validate_top_k(top_k)
         if not isinstance(user_query, str) or not user_query.strip():
             raise query_planner.PlannerInputError("Query must be a non-empty string.")
@@ -129,13 +156,18 @@ class FinancialRetrievalPipeline:
                     skipped_reason=reason,
                 ))
             return FinancialRetrievalResult(
-                user_query, plan, task_results, warnings, "needs_clarification"
+                user_query, plan, task_results, warnings, "needs_clarification",
+                self.retrieval_strategy,
             )
         if query_planner.Intent.out_of_scope in plan.intents:
-            return FinancialRetrievalResult(user_query, plan, [], warnings, "out_of_scope")
+            return FinancialRetrievalResult(
+                user_query, plan, [], warnings, "out_of_scope", self.retrieval_strategy
+            )
         if not plan.tasks:
             warnings.append("The planner returned no usable retrieval tasks.")
-            return FinancialRetrievalResult(user_query, plan, [], warnings, "no_tasks")
+            return FinancialRetrievalResult(
+                user_query, plan, [], warnings, "no_tasks", self.retrieval_strategy
+            )
 
         task_results = []
         for task in plan.tasks:
@@ -154,13 +186,25 @@ class FinancialRetrievalPipeline:
 
             filters = self._task_filters(task, explicit_filters)
             try:
-                results = self.retriever.search(
-                    query=task.query,
-                    top_k=top_k,
-                    company=filters.get("company"),
-                    financial_year=filters.get("financial_year"),
-                    chunk_type=filters.get("chunk_type"),
+                searcher = (
+                    self.retriever
+                    if self.retrieval_strategy in {"baseline", "chunk_semantic"}
+                    else self.experimental_retriever
                 )
+                search_args = {
+                    "query": task.query,
+                    "top_k": top_k,
+                    "company": filters.get("company"),
+                    "financial_year": filters.get("financial_year"),
+                    "chunk_type": filters.get("chunk_type"),
+                }
+                if self.retrieval_strategy in {"baseline", "chunk_semantic"}:
+                    results = searcher.search(**search_args)
+                else:
+                    results = searcher.search(
+                        **search_args,
+                        strategy=self.retrieval_strategy,
+                    )
             except Exception as error:
                 message = f"Task {task.task_id!r} retrieval failed: {type(error).__name__}: {error}"
                 warnings.append(message)
@@ -190,4 +234,5 @@ class FinancialRetrievalPipeline:
             task_results,
             warnings,
             status,
+            self.retrieval_strategy,
         )

@@ -1,0 +1,1 @@
+{"metadata": {"human_evidence_verification_performed": false, "human_verified_evidence_reference_count": 0, "strategy_availability": {"keyword_semantic": {"indexed_chunks": 150}, "keyword_lexical": {"indexed_chunks": 150}}}, "cases": [{"question_id": "infosys_q1", "strategies": {"baseline": {"status": "failed", "error": "Unsupported financial year."}}}]}

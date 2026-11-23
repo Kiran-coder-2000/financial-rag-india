@@ -1,0 +1,3 @@
+question_id,company,category,common_subset,supporting_evidence_label_count
+tcs_q1,TataConsultancyServices,financial_metric,True,1
+infosys_q1,Infosys,financial_metric,False,1

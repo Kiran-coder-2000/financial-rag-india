@@ -38,7 +38,7 @@ Generate the pilot into a separate file:
 .venv\Scripts\python.exe scripts\generate_chunk_keywords.py --limit 200 --batch-size 16 --output data\keyword_metadata\chunk_keywords_pilot.jsonl
 ```
 
-The runner uses `.env`/environment settings `GEMINI_API_KEY` and `GEMINI_MODEL`, as does the existing query planner. Keys are never printed. It requests structured JSON and validates it with Pydantic, retries transient failures with bounded exponential backoff, checkpoints atomically after each batch, and resumes successful/skipped records only when source text hash, source metadata, provider, model and annotation version still match. Failed records are retried on a later run. `--force` explicitly regenerates selected annotations.
+The runner uses `.env`/environment settings `GEMINI_API_KEY` and `GEMINI_MODEL`, as does the existing query planner. Keys are never printed. It requests structured JSON and validates it with Pydantic, retries transient failures with bounded exponential backoff, checkpoints atomically after each batch, and resumes successful/skipped records only when source text hash, source metadata, provider, model and annotation version still match. Empty source text and valid responses with no usable keywords are recorded as skipped with empty keywords and no description or error; API, parsing and validation errors remain failed and are retried on a later run. `--force` explicitly regenerates selected annotations.
 
 Review the pilot JSONL manually before full processing. Check factual support, consolidated/standalone distinction, reporting periods, table headers/units, useful domain terms and generic/filler keywords. The current format marks generation status, not human approval; do not treat `success` as verified gold evidence.
 
@@ -106,6 +106,12 @@ Run only manually verified gold cases:
 ```
 
 Evaluation compares baseline, chunk semantic, keyword semantic, lexical, two-path and three-path strategies with the same case queries, filters and per-path candidate budget. Reported metrics are macro-averaged: Recall@k is relevant IDs in the first k divided by all gold relevant IDs; Precision@5 is relevant IDs in the first five divided by 5; MRR is the mean reciprocal rank of the first relevant ID. Per-case output includes first relevant rank, retrieved/missing IDs, per-path candidate counts, pairwise overlap, unique candidates, per-path/total latency and final candidate IDs. No LLM is called during evaluation.
+
+Runtime and evaluation budgets are intentionally separate configuration choices. Runtime defaults are 5 candidates per path and 10 final fused chunks. The offline evaluator defaults to `--candidate-k 100` so Recall@10 and path overlap are measurable over a wider candidate pool; its diagnostics print the effective per-path limits, strategy, query source and filters. Set explicit `path_candidate_limits` in a benchmark variant when comparing another fixed budget, and report that configuration with the metrics.
+
+### Separate Answer-Level Governance Evaluation
+
+Retrieval metrics do not establish that an answer is factual. A later answer-level evaluation must use the same fixed questions and manually reviewed evidence labels, but a separate answer/output dataset. For each generated answer, record claims, cited chunk IDs, extracted figures/units/years, consolidated-versus-standalone scope, support status, contradiction status, abstention/escalation behavior and severity. Human or independently validated annotation should determine whether each claim is supported; an LLM judge must not be the sole metric source. Report citation precision/recall, unsupported-claim rate, wrong-number rate, wrong-period/scope rate, abstention quality and high-severity financial errors separately from Recall@k/MRR. Do not select a retrieval strategy as deployment-ready from retrieval metrics alone.
 
 The current generated gold dataset has pending candidates and is not yet suitable for gold evaluation. The existing validation benchmark currently has one case, so results from it are a smoke comparison, not evidence that a strategy is generally superior. Use a broad reviewed set and held-out questions before selecting a winner.
 

@@ -37,6 +37,23 @@ def _keyword_document(annotation: ChunkKeywordAnnotation) -> str:
     return keywords
 
 
+def _keyword_metadata_fingerprint(annotation: ChunkKeywordAnnotation, source: dict) -> str:
+    indexed_metadata = {
+        key: source.get(key)
+        for key in (
+            "company", "financial_year", "document", "page", "section",
+            "chunk_type", "table_id", "table_heading",
+        )
+    }
+    indexed_metadata.update({
+        "annotation_version": annotation.annotation_version,
+        "annotation_provider": annotation.annotation_provider,
+        "annotation_model": annotation.annotation_model,
+    })
+    payload = json.dumps(indexed_metadata, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def _source_text_hash(chunk: dict) -> str:
     text = chunk.get("text")
     encoded = text if isinstance(text, str) else json.dumps(text, ensure_ascii=False)
@@ -191,23 +208,48 @@ def index_keyword_vectors(
         existing_metadata.update(zip(existing["ids"], existing["metadatas"]))
 
     pending = []
+    metadata_only = []
     unchanged = 0
     for annotation in valid_annotations:
         document = _keyword_document(annotation)
         digest = hashlib.sha256(document.encode("utf-8")).hexdigest()
+        metadata_fingerprint = _keyword_metadata_fingerprint(
+            annotation, source_chunks_by_id[annotation.chunk_id]
+        )
         current = existing_metadata.get(annotation.chunk_id)
-        if current and current.get("keyword_document_sha256") == digest:
+        if (
+            current
+            and current.get("keyword_document_sha256") == digest
+            and current.get("keyword_metadata_sha256") == metadata_fingerprint
+        ):
             unchanged += 1
             continue
-        pending.append((annotation, document, digest, source_chunks_by_id[annotation.chunk_id]))
+        item = (annotation, document, digest, metadata_fingerprint, source_chunks_by_id[annotation.chunk_id])
+        if current and current.get("keyword_document_sha256") == digest:
+            metadata_only.append(item)
+        else:
+            pending.append(item)
+
+    existing_vectors = {}
+    for id_batch in _batched([item[0].chunk_id for item in metadata_only], batch_size):
+        existing = collection.get(ids=id_batch, include=["embeddings"])
+        existing_vectors.update(zip(existing["ids"], existing.get("embeddings", [])))
+    missing_vectors = [item[0].chunk_id for item in metadata_only if item[0].chunk_id not in existing_vectors]
+    if missing_vectors:
+        pending.extend(
+            item for item in metadata_only if item[0].chunk_id in missing_vectors
+        )
+        metadata_only = [
+            item for item in metadata_only if item[0].chunk_id not in missing_vectors
+        ]
 
     if pending and model is None:
         model = embeddings.load_model(embeddings.DEFAULT_MODEL_NAME, embeddings.DEFAULT_MODEL_REVISION)
 
     indexed = updated = 0
-    for batch in _batched(pending, batch_size):
+    def upsert_items(batch, vectors):
+        nonlocal indexed, updated
         documents = [item[1] for item in batch]
-        vectors = embeddings.embed_texts(model, documents, batch_size=batch_size)
         if vectors.ndim != 2 or vectors.shape != (len(batch), EXPECTED_DIMENSION):
             raise KeywordIndexError(
                 f"Keyword embedding batch has shape {vectors.shape}; expected ({len(batch)}, {EXPECTED_DIMENSION})."
@@ -215,7 +257,7 @@ def index_keyword_vectors(
         if not np.isfinite(vectors).all():
             raise KeywordIndexError("Keyword embeddings contain non-finite values.")
         metadatas = []
-        for annotation, document, digest, source in batch:
+        for annotation, document, digest, metadata_fingerprint, source in batch:
             metadata = {
                 key: source[key]
                 for key in (
@@ -230,6 +272,7 @@ def index_keyword_vectors(
                 "annotation_provider": annotation.annotation_provider,
                 "annotation_model": annotation.annotation_model,
                 "keyword_document_sha256": digest,
+                "keyword_metadata_sha256": metadata_fingerprint,
             })
             metadatas.append(metadata)
         collection.upsert(
@@ -238,11 +281,20 @@ def index_keyword_vectors(
             documents=documents,
             metadatas=metadatas,
         )
-        for annotation, _, _, _ in batch:
+        for annotation, _, _, _, _ in batch:
             if annotation.chunk_id in existing_metadata:
                 updated += 1
             else:
                 indexed += 1
+
+    for batch in _batched(pending, batch_size):
+        documents = [item[1] for item in batch]
+        vectors = embeddings.embed_texts(model, documents, batch_size=batch_size)
+        upsert_items(batch, vectors)
+
+    for batch in _batched(metadata_only, batch_size):
+        vectors = np.asarray([existing_vectors[item[0].chunk_id] for item in batch], dtype=np.float32)
+        upsert_items(batch, vectors)
 
     for id_batch in _batched(all_ids, batch_size):
         stored_ids = collection.get(ids=id_batch, include=["metadatas"])["ids"]
@@ -310,9 +362,18 @@ class KeywordLexicalIndex:
                         annotation_version TEXT NOT NULL,
                         annotation_provider TEXT NOT NULL,
                         annotation_model TEXT NOT NULL,
-                        source_text_sha256 TEXT NOT NULL
+                        source_text_sha256 TEXT NOT NULL,
+                        indexed_metadata_sha256 TEXT
                     )
                 """)
+                columns = {
+                    row[1]
+                    for row in connection.execute("PRAGMA table_info(keyword_records)").fetchall()
+                }
+                if "indexed_metadata_sha256" not in columns:
+                    connection.execute(
+                        "ALTER TABLE keyword_records ADD COLUMN indexed_metadata_sha256 TEXT"
+                    )
                 connection.execute("""
                     CREATE VIRTUAL TABLE IF NOT EXISTS keyword_search USING fts5(
                         chunk_id UNINDEXED,
@@ -353,18 +414,25 @@ class KeywordLexicalIndex:
                     if not annotation.keywords:
                         raise KeywordIndexError(f"Successful annotation for {annotation.chunk_id!r} has no keywords.")
 
+                    metadata_fingerprint = _keyword_metadata_fingerprint(annotation, source)
                     previous = connection.execute(
-                        "SELECT keywords_json, description, annotation_version, source_text_sha256 "
+                        "SELECT keywords_json, description, annotation_version, source_text_sha256, "
+                        "indexed_metadata_sha256 "
                         "FROM keyword_records WHERE chunk_id = ?",
                         (annotation.chunk_id,),
                     ).fetchone()
                     keywords_json = json.dumps(annotation.keywords, ensure_ascii=False, separators=(",", ":"))
+                    fts_exists = connection.execute(
+                        "SELECT 1 FROM keyword_search WHERE chunk_id = ? LIMIT 1",
+                        (annotation.chunk_id,),
+                    ).fetchone() is not None
                     if previous and tuple(previous) == (
                         keywords_json,
                         annotation.description or "",
                         annotation.annotation_version,
                         annotation.source_text_sha256,
-                    ):
+                        metadata_fingerprint,
+                    ) and fts_exists:
                         unchanged += 1
                         continue
 
@@ -388,10 +456,11 @@ class KeywordLexicalIndex:
                         annotation.annotation_provider,
                         annotation.annotation_model,
                         annotation.source_text_sha256,
+                        metadata_fingerprint,
                     )
                     connection.execute("""
                         INSERT OR REPLACE INTO keyword_records VALUES
-                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, metadata_values)
                     connection.execute("DELETE FROM keyword_search WHERE chunk_id = ?", (annotation.chunk_id,))
                     connection.execute("""

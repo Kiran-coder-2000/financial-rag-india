@@ -1,0 +1,2 @@
+strategy,category,query_count,scored_queries,macro_f1@5
+baseline,financial_metric,1,1,0.1

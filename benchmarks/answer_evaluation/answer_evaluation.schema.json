@@ -1,0 +1,880 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://financial-rag-india.local/schemas/answer-evaluation.schema.json",
+  "title": "Financial answer evaluation dataset",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "dataset_version",
+    "dataset_id",
+    "annotation_guidelines_version",
+    "source",
+    "cases"
+  ],
+  "properties": {
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "annotation_guidelines_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "$ref": "#/$defs/nonEmptyString"
+    },
+    "benchmark_profile": {
+      "type": "string",
+      "enum": [
+        "refined_60"
+      ]
+    },
+    "total_cases": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "category_distribution_per_company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Infosys",
+        "RelianceIndustries",
+        "TataConsultancyServices"
+      ],
+      "properties": {
+        "Infosys": {
+          "$ref": "#/$defs/refinedCategoryDistribution"
+        },
+        "RelianceIndustries": {
+          "$ref": "#/$defs/refinedCategoryDistribution"
+        },
+        "TataConsultancyServices": {
+          "$ref": "#/$defs/refinedCategoryDistribution"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question_dataset_path",
+        "question_dataset_sha256",
+        "source_dataset_version",
+        "source_chunk_corpus_sha256"
+      ],
+      "properties": {
+        "question_dataset_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_dataset_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "source_dataset_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_chunk_corpus_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/case"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "benchmark_profile": {
+            "const": "refined_60"
+          }
+        },
+        "required": [
+          "benchmark_profile"
+        ]
+      },
+      "then": {
+        "required": [
+          "total_cases",
+          "category_distribution_per_company"
+        ],
+        "properties": {
+          "total_cases": {
+            "const": 60
+          },
+          "cases": {
+            "minItems": 60,
+            "maxItems": 60
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S"
+    },
+    "company": {
+      "type": "string",
+      "enum": [
+        "Infosys",
+        "TataConsultancyServices",
+        "RelianceIndustries"
+      ]
+    },
+    "financialYear": {
+      "type": "string",
+      "pattern": "^(?:19|20)\\d{2}-(?:19|20)\\d{2}$"
+    },
+    "quarterPeriod": {
+      "type": "string",
+      "pattern": "^FY(?:19|20)\\d{2}-Q[1-4]$"
+    },
+    "financialPeriod": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/financialYear"
+        },
+        {
+          "$ref": "#/$defs/quarterPeriod"
+        },
+        {
+          "const": "current"
+        }
+      ]
+    },
+    "refinedCategoryDistribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "financial_metric",
+        "year_over_year_comparison",
+        "segment_performance",
+        "multi_evidence_comparison",
+        "insufficient_evidence",
+        "conflicting_or_reconcilable_evidence",
+        "temporal_ambiguity_or_current_information"
+      ],
+      "properties": {
+        "financial_metric": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "year_over_year_comparison": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "segment_performance": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "multi_evidence_comparison": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "insufficient_evidence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "conflicting_or_reconcilable_evidence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "temporal_ambiguity_or_current_information": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "supportLabel": {
+      "type": "string",
+      "enum": [
+        "supported",
+        "partially_supported",
+        "contradicted",
+        "not_supported"
+      ]
+    },
+    "evidenceReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chunk_id",
+        "verification_status",
+        "verified_by",
+        "relation",
+        "rationale"
+      ],
+      "properties": {
+        "chunk_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "verification_status": {
+          "const": "human_verified"
+        },
+        "verified_by": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "relation": {
+          "type": "string",
+          "enum": [
+            "supports",
+            "contradicts",
+            "context_only"
+          ]
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    },
+    "numericValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric",
+        "value",
+        "currency",
+        "unit",
+        "scale",
+        "entity_scope",
+        "period"
+      ],
+      "properties": {
+        "metric": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "value": {
+          "type": "string",
+          "pattern": "^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?$"
+        },
+        "currency": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-Z]{3}$"
+        },
+        "unit": {
+          "type": "string",
+          "enum": [
+            "currency",
+            "percent",
+            "ratio",
+            "count",
+            "basis_points"
+          ]
+        },
+        "scale": {
+          "type": "string",
+          "enum": [
+            "ones",
+            "thousand",
+            "million",
+            "billion",
+            "lakh",
+            "crore"
+          ]
+        },
+        "entity_scope": {
+          "type": "string",
+          "enum": [
+            "consolidated",
+            "standalone",
+            "segment",
+            "unspecified"
+          ]
+        },
+        "period": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/financialPeriod"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "temporalValue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "periods",
+        "comparison_basis",
+        "temporal_scope"
+      ],
+      "properties": {
+        "periods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/financialPeriod"
+          },
+          "uniqueItems": true
+        },
+        "comparison_basis": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "single_period",
+            "year_over_year",
+            "quarter_over_quarter",
+            "cumulative",
+            "other",
+            null
+          ]
+        },
+        "temporal_scope": {
+          "type": "string",
+          "enum": [
+            "historical",
+            "current",
+            "forecast",
+            "unspecified"
+          ]
+        }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rationale",
+        "expected",
+        "observed"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "correct",
+            "incorrect",
+            "not_supported",
+            "not_applicable"
+          ]
+        },
+        "rationale": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "expected": {},
+        "observed": {}
+      }
+    },
+    "numericalAssessment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/assessment"
+        },
+        {
+          "properties": {
+            "expected": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/numericValue"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "observed": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/numericValue"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "temporalAssessment": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/assessment"
+        },
+        {
+          "properties": {
+            "expected": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/temporalValue"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "observed": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/temporalValue"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "question",
+        "company",
+        "category",
+        "financial_periods",
+        "filters",
+        "review_status",
+        "unverified_candidate_chunk_ids",
+        "gold",
+        "answer_reviews"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "question": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "company": {
+          "$ref": "#/$defs/company"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "financial_metric",
+            "year_over_year_comparison",
+            "segment_performance",
+            "financial_statement_figure",
+            "multi_evidence_comparison",
+            "insufficient_evidence",
+            "conflicting_or_reconcilable_evidence",
+            "temporal_ambiguity_or_current_information"
+          ]
+        },
+        "financial_periods": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/financialPeriod"
+          },
+          "uniqueItems": true
+        },
+        "filters": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "company"
+          ],
+          "properties": {
+            "company": {
+              "$ref": "#/$defs/company"
+            },
+            "companies": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/company"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "financial_year": {
+              "$ref": "#/$defs/financialYear"
+            }
+          }
+        },
+        "review_status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "verified",
+            "rejected"
+          ]
+        },
+        "unverified_candidate_chunk_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nonEmptyString"
+          },
+          "uniqueItems": true
+        },
+        "source_question_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "candidate_expected_action": {
+          "type": "string",
+          "enum": [
+            "answer",
+            "partial",
+            "abstain",
+            "clarify",
+            "current_information_unavailable"
+          ]
+        },
+        "candidate_expected_action_status": {
+          "type": "string",
+          "enum": [
+            "unverified",
+            "human_verified"
+          ]
+        },
+        "annotation_note": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "revision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "predecessor_id",
+            "original_question",
+            "reason"
+          ],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "reworded",
+                "replaced"
+              ]
+            },
+            "predecessor_id": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "original_question": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "reason": {
+              "$ref": "#/$defs/nonEmptyString"
+            }
+          }
+        },
+        "gold": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "additionalProperties": false,
+          "required": [
+            "expected_action",
+            "action_rationale",
+            "expected_assertions"
+          ],
+          "properties": {
+            "expected_action": {
+              "type": "string",
+              "enum": [
+                "answer",
+                "partial",
+                "abstain",
+                "clarify",
+                "current_information_unavailable"
+              ]
+            },
+            "action_rationale": {
+              "$ref": "#/$defs/nonEmptyString"
+            },
+            "expected_assertions": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "assertion_id",
+                  "proposition",
+                  "evidence",
+                  "numerical_reference",
+                  "temporal_reference"
+                ],
+                "properties": {
+                  "assertion_id": {
+                    "$ref": "#/$defs/nonEmptyString"
+                  },
+                  "proposition": {
+                    "$ref": "#/$defs/nonEmptyString"
+                  },
+                  "evidence": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/evidenceReference"
+                    }
+                  },
+                  "numerical_reference": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/numericValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "temporal_reference": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/$defs/temporalValue"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "answer_reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "review_id",
+              "run_id",
+              "reviewer_id",
+              "review_status",
+              "claims"
+            ],
+            "properties": {
+              "review_id": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "run_id": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "reviewer_id": {
+                "$ref": "#/$defs/nonEmptyString"
+              },
+              "review_status": {
+                "type": "string",
+                "enum": [
+                  "draft",
+                  "reviewed",
+                  "adjudicated"
+                ]
+              },
+              "claims": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "claim_id",
+                    "text",
+                    "cited_chunk_ids",
+                    "citation_assessments",
+                    "atomic_assertions"
+                  ],
+                  "properties": {
+                    "claim_id": {
+                      "$ref": "#/$defs/nonEmptyString"
+                    },
+                    "text": {
+                      "$ref": "#/$defs/nonEmptyString"
+                    },
+                    "cited_chunk_ids": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/nonEmptyString"
+                      },
+                      "uniqueItems": true
+                    },
+                    "citation_assessments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "chunk_id",
+                          "support_status",
+                          "rationale"
+                        ],
+                        "properties": {
+                          "chunk_id": {
+                            "$ref": "#/$defs/nonEmptyString"
+                          },
+                          "support_status": {
+                            "$ref": "#/$defs/supportLabel"
+                          },
+                          "rationale": {
+                            "$ref": "#/$defs/nonEmptyString"
+                          }
+                        }
+                      }
+                    },
+                    "atomic_assertions": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "assertion_id",
+                          "text",
+                          "support_status",
+                          "rationale",
+                          "numerical_assessment",
+                          "temporal_assessment"
+                        ],
+                        "properties": {
+                          "assertion_id": {
+                            "$ref": "#/$defs/nonEmptyString"
+                          },
+                          "text": {
+                            "$ref": "#/$defs/nonEmptyString"
+                          },
+                          "support_status": {
+                            "$ref": "#/$defs/supportLabel"
+                          },
+                          "rationale": {
+                            "$ref": "#/$defs/nonEmptyString"
+                          },
+                          "numerical_assessment": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/$defs/numericalAssessment"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "temporal_assessment": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/$defs/temporalAssessment"
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "candidate_expected_action"
+            ]
+          },
+          "then": {
+            "required": [
+              "candidate_expected_action_status"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "candidate_expected_action_status"
+            ]
+          },
+          "then": {
+            "required": [
+              "candidate_expected_action"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "review_status": {
+                "const": "verified"
+              }
+            },
+            "required": [
+              "review_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "gold": {
+                "type": "object"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "gold": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "gold": {
+                "type": "object",
+                "properties": {
+                  "expected_action": {
+                    "enum": [
+                      "answer",
+                      "partial"
+                    ]
+                  }
+                },
+                "required": [
+                  "expected_action"
+                ]
+              }
+            },
+            "required": [
+              "gold"
+            ]
+          },
+          "then": {
+            "properties": {
+              "gold": {
+                "properties": {
+                  "expected_assertions": {
+                    "minItems": 1
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1382 @@
+{
+  "dataset_version": "2.0.0",
+  "dataset_id": "financial-rag-india-refined-answer-evaluation-v2",
+  "annotation_guidelines_version": "1.0.0",
+  "description": "Refined 60-case corpus-aligned candidate benchmark. All candidate annotations remain unverified and all gold annotations are pending.",
+  "benchmark_profile": "refined_60",
+  "total_cases": 60,
+  "category_distribution_per_company": {
+    "Infosys": {
+      "financial_metric": 4,
+      "year_over_year_comparison": 4,
+      "segment_performance": 3,
+      "multi_evidence_comparison": 3,
+      "insufficient_evidence": 2,
+      "conflicting_or_reconcilable_evidence": 2,
+      "temporal_ambiguity_or_current_information": 2
+    },
+    "RelianceIndustries": {
+      "financial_metric": 4,
+      "year_over_year_comparison": 3,
+      "segment_performance": 3,
+      "multi_evidence_comparison": 3,
+      "insufficient_evidence": 2,
+      "conflicting_or_reconcilable_evidence": 3,
+      "temporal_ambiguity_or_current_information": 2
+    },
+    "TataConsultancyServices": {
+      "financial_metric": 4,
+      "year_over_year_comparison": 4,
+      "segment_performance": 3,
+      "multi_evidence_comparison": 3,
+      "insufficient_evidence": 2,
+      "conflicting_or_reconcilable_evidence": 2,
+      "temporal_ambiguity_or_current_information": 2
+    }
+  },
+  "source": {
+    "question_dataset_path": "financial_rag_60_question_bank.json",
+    "question_dataset_sha256": "2c7b7435e8f78e7541348122abf304485b536e474b850b08bb241f3b66bfb878",
+    "source_dataset_version": "2.0.0",
+    "source_chunk_corpus_sha256": "b6af8d5df0fee1c59dcca7833e16099652b2a51f5226fab48213c9f46c3927fe"
+  },
+  "cases": [
+    {
+      "id": "tcs_q01",
+      "question": "What was TCS consolidated revenue from operations for FY2024, in INR crore?",
+      "company": "TataConsultancyServices",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q1",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Unverified candidate assertion: TCS reported consolidated revenue from operations of INR 240,893 crore for FY2024. Distinguish revenue from operations from total income; verify consolidated scope.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q02",
+      "question": "What was TCS consolidated profit after tax for FY2024, in INR crore?",
+      "company": "TataConsultancyServices",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q2",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Unverified candidate assertion: INR 46,099 crore represents consolidated PAT attributable to shareholders and non-controlling interests for FY2024; distinguish it from INR 45,908 crore attributable to shareholders only.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q03",
+      "question": "What operating margin did TCS report for FY2024, and what qualification did it provide regarding the settlement of a legal claim?",
+      "company": "TataConsultancyServices",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q3",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Unverified candidate answer should cover the reported FY2024 operating margin of 24.6% and the qualification that it excludes settlement of a legal claim.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q04",
+      "question": "What total contract value (TCV) of new deals did TCS report for FY2024?",
+      "company": "TataConsultancyServices",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q4",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify the FY2024 TCV amount, currency, and the annual report's definition. Preserve the report's glossary relationship between Order Book and Total Contract Value; do not assume these are separate measures.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q05",
+      "question": "What was the year-over-year percentage change in TCS consolidated profit after tax from FY2023 to FY2024?",
+      "company": "TataConsultancyServices",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q5",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Record both values, formula and rounding.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q06",
+      "question": "How did TCS annual deal TCV change between FY2023 and FY2024, in value and percentage terms?",
+      "company": "TataConsultancyServices",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q6",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify whether the FY2023 closing order book amount and FY2024 annual TCV amount are comparable under the respective annual reports' definitions and reporting bases. Preserve the source labels and timing. The FY2024 glossary cross-reference between Order Book and Total Contract Value is relevant evidence, but do not assume comparability without checking the underlying disclosures. Calculate value and percentage changes only if comparability is established; otherwise explain the limitation.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q07",
+      "question": "What was TCS consolidated revenue from operations in FY2023 and FY2024, and what was its absolute year-over-year change in INR crore?",
+      "company": "TataConsultancyServices",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q7",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the same consolidated revenue-from-operations line for both fiscal years; report the absolute change in INR crore.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "replaced",
+        "predecessor_id": "tcs_q07",
+        "original_question": "What was the sequential quarter-on-quarter change in TCS revenue from Q3 FY2024 to Q4 FY2024?",
+        "reason": "Quarter-specific revenue values were not established; the consolidated annual statement provides both fiscal-year values."
+      }
+    },
+    {
+      "id": "tcs_q08",
+      "question": "What was TCS FY2024 revenue growth compared with FY2023, and was it stated in constant-currency or reported-currency terms?",
+      "company": "TataConsultancyServices",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q8",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Name growth basis; do not conflate constant and reported currency.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q09",
+      "question": "Which category in TCS's FY2024 Industry Vertical table recorded the highest year-over-year revenue growth, including the Others category, and what was its reported-currency growth rate?",
+      "company": "TataConsultancyServices",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q9",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the FY2024 annual vertical comparison and preserve its reported-currency basis.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "tcs_q09",
+        "original_question": "Which industry vertical recorded the highest year-over-year growth for TCS in Q4 FY2024, and what rate and basis were reported?",
+        "reason": "The indexed report supports annual industry-vertical growth but does not establish a Q4-specific ranking."
+      }
+    },
+    {
+      "id": "tcs_q10",
+      "question": "What year-over-year revenue growth or decline did TCS report for its BFSI vertical in FY2024?",
+      "company": "TataConsultancyServices",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q10",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify quarterly versus full-year and currency basis.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q11",
+      "question": "Which geographic market had the highest reported revenue growth for TCS in FY2024, and what was the rate?",
+      "company": "TataConsultancyServices",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q11",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish geographic revenue share from revenue growth.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q12",
+      "question": "Compare TCS FY2024 operating margin with Infosys FY2024 operating margin. Which was higher, and what comparability caveat should be checked?",
+      "company": "TataConsultancyServices",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "companies": [
+          "TataConsultancyServices",
+          "Infosys"
+        ],
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q12",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires two sources and comparable margin definitions/periods.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q13",
+      "question": "Did TCS annual deal TCV or consolidated profit after tax grow faster from FY2023 to FY2024? Show both calculations.",
+      "company": "TataConsultancyServices",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q13",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Compare growth rates, not absolute amounts. Preserve the source labels and reporting periods: FY2023 closing order book of US$34.1 billion and FY2024 TCV/order book of US$42.7 billion. The FY2024 glossary cross-reference between Order Book and Total Contract Value supports comparability. Based on the rounded reported amounts, calculate TCV/order-book growth as (42.7 - 34.1) / 34.1, approximately 25.2%. Calculate consolidated PAT growth, including non-controlling interests, using ₹42,303 crore for FY2023 and ₹46,099 crore for FY2024: (46,099 - 42,303) / 42,303, approximately 9.0%.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q14",
+      "question": "TCS reported an operating margin of 24.6% for FY2024 and 26% for Q4 FY2024. What do these annual and quarter-specific figures establish, and why do they not by themselves establish employee-cost efficiency?",
+      "company": "TataConsultancyServices",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024",
+        "FY2024-Q4"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q14",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish the annual and quarter-specific margin figures; do not infer employee-cost efficiency from margins alone.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "tcs_q14",
+        "original_question": "What do TCS Q4 operating-margin movement and full-year operating margin establish, and what can they not establish about employee-cost efficiency?",
+        "reason": "The FY2024 report supports the stated annual and Q4 values, but not the original Q4 FY2023 movement premise or a causal employee-cost conclusion."
+      }
+    },
+    {
+      "id": "tcs_q15",
+      "question": "Does the indexed TCS corpus establish FY2010 consolidated revenue from operations specifically? If it contains only a differently labelled or scoped historical revenue figure, identify that limitation rather than treating it as the requested metric.",
+      "company": "TataConsultancyServices",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "2009-2010"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2009-2010"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q15",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Corpus-relative: do not treat FY2010 total revenue as consolidated revenue from operations without matching label and scope.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "tcs_q15",
+        "original_question": "What was TCS consolidated revenue from operations in FY2010, using only documents available in this project indexed corpus?",
+        "reason": "The indexed historical table reports total revenue but does not establish the requested revenue-from-operations label and consolidated scope."
+      }
+    },
+    {
+      "id": "tcs_q16",
+      "question": "Does the indexed TCS FY2024 corpus provide revenue amounts attributable to each individual customer? If not, state that the corpus does not establish a customer-by-customer breakdown.",
+      "company": "TataConsultancyServices",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q16",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Check the indexed FY2024 corpus for individual customer revenue amounts; do not infer absence beyond the corpus.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "tcs_q16",
+        "original_question": "What was TCS revenue attributable to each individual customer for FY2024? Provide a customer-by-customer breakdown.",
+        "reason": "Clarifies the exact customer-level disclosure needed for this corpus-relative insufficiency test."
+      }
+    },
+    {
+      "id": "tcs_q17",
+      "question": "How should TCS FY2024 full-year operating margin be reconciled with its Q4 FY2024 operating margin? Are they contradictory or different-period measures?",
+      "company": "TataConsultancyServices",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2023-2024",
+        "FY2024-Q4"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q17",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use actual passages; distinguish full-year versus quarter-specific measure.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q18",
+      "question": "If TCS annual report lists revenue from operations and total income separately, which figure answers a question specifically asking for revenue from operations, and why?",
+      "company": "TataConsultancyServices",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q18",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use primary statement labels; do not treat measures as interchangeable.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q19",
+      "question": "What is TCS share price on NSE right now, and what is its percentage change today?",
+      "company": "TataConsultancyServices",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q19",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "No live market-data source; do not present stale corpus data as live.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tcs_q20",
+      "question": "Why is TCS share price moving today? Identify the latest verified event or market driver.",
+      "company": "TataConsultancyServices",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q20",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires live market/news evidence; do not invent cause from annual reports.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q21",
+      "question": "What was Infosys consolidated revenue from operations for FY2024, in INR crore?",
+      "company": "Infosys",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q21",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify revenue from operations and consolidated scope.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q22",
+      "question": "What was Infosys's consolidated basic earnings per share (EPS) for FY2024?",
+      "company": "Infosys",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q22",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish consolidated basic EPS of ₹63.39 from standalone basic EPS of ₹65.62 for FY2024; do not substitute diluted EPS.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q23",
+      "question": "What was Infosys's consolidated operating margin for FY2024?",
+      "company": "Infosys",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q23",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish consolidated operating margin of 20.7% from standalone operating margin of 22.3% for FY2024.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q24",
+      "question": "What free cash flow did Infosys report for FY2024, and what unit was used?",
+      "company": "Infosys",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q24",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Check company FCF definition and unit.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q25",
+      "question": "What was Infosys's FY2024 year-over-year consolidated revenue growth in INR-reported terms?",
+      "company": "Infosys",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q25",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish FY2024 consolidated INR-reported revenue growth of 4.7% from USD-reported growth of 1.9% and constant-currency growth of 1.4%. Do not substitute or conflate these rates.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q26",
+      "question": "What total large-deal contract value (TCV) did Infosys report for FY2024?",
+      "company": "Infosys",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q26",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish large-deal TCV from recognized revenue.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q27",
+      "question": "What was the percentage change in Infosys's consolidated basic EPS from FY2023 to FY2024? Show both reported EPS values.",
+      "company": "Infosys",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q27",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use consolidated basic EPS of ₹57.63 for FY2023 and ₹63.39 for FY2024. Calculate (63.39 - 57.63) / 57.63 × 100 = approximately 10.0%. Distinguish these consolidated values from standalone basic EPS of ₹55.48 for FY2023 and ₹65.62 for FY2024.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q28",
+      "question": "What was Infosys's FY2024 year-over-year consolidated revenue growth in INR terms, comparing reported growth with constant-currency growth?",
+      "company": "Infosys",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2022-2023",
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q28",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "For FY2024 consolidated revenue growth in INR terms, preserve 4.7% INR-reported growth and 1.4% constant-currency growth; the difference is 3.3 percentage points. Do not mix the USD-reported 1.9% rate into this INR comparison.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q29",
+      "question": "Which geographic segment contributed the largest share of Infosys revenue in FY2024, and what share did it contribute?",
+      "company": "Infosys",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q29",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use consolidated FY2024 geographic revenue by customer domicile. Identify North America as the largest geography and calculate its share using total consolidated revenue of ₹153,670 crore as the denominator; label the share as calculated.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q30",
+      "question": "Which reported business segment contributed the largest share of Infosys consolidated revenue from operations in FY2024?",
+      "company": "Infosys",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q30",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the report's Business segments classification, not an industry-vertical label. Preserve the source segment labels and amounts; compare FY2024 segment revenue with consolidated revenue from operations of ₹153,670 crore.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q31",
+      "question": "What quantitative measure did Infosys disclose for digital revenue in FY2024? If no comparable digital-versus-core split is disclosed, state that limitation.",
+      "company": "Infosys",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q31",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Do not invent a digital-revenue amount or percentage. The report groups core and digital offerings under software-related services; state that no separate comparable digital-versus-core revenue split was found in the indexed FY2024 report.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q32",
+      "question": "Using Infosys FY2024 consolidated revenue and profit after tax, calculate net profit margin and show formula.",
+      "company": "Infosys",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q32",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use consolidated FY2024 profit after tax of ₹26,248 crore and revenue from operations of ₹153,670 crore, both in ₹ crore. Show the calculation ₹26,248 / ₹153,670 × 100 = approximately 17.1%; do not substitute profit attributable to owners of ₹26,233 crore.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q33",
+      "question": "For FY2024, what consolidated cash and investments did Infosys report as at March 31, 2024, and what current lease liability amount does its standalone statement report? Can these figures be compared as same-scope balances?",
+      "company": "Infosys",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q33",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Preserve the March 31, 2024 balances and scope: consolidated cash and investments of ₹39,005 crore versus standalone current lease liabilities of ₹678 crore. State that these are not same-scope balances and do not equate cash and investments with net cash or with zero total debt.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "infosys_q33",
+        "original_question": "Compare Infosys cash and cash equivalents with short-term borrowings and current lease liabilities in FY2024. What conclusion is supported?",
+        "reason": "Makes the amount, date, and consolidated-versus-standalone scope explicit instead of implying a consolidated lease figure."
+      }
+    },
+    {
+      "id": "infosys_q34",
+      "question": "What does Infosys FY2024 large-deal TCV indicate about potential future work, and why is it not FY2024 recognized revenue?",
+      "company": "Infosys",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q34",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Preserve FY2024 large-deal TCV as over US$17.7 billion. Explain that TCV is not FY2024 recognized revenue: revenue recognition follows transfer of control/performance obligations. Do not imply a guaranteed conversion amount or timing.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q35",
+      "question": "How much did Infosys spend specifically on space-research projects in FY2024, using the indexed corporate-report corpus?",
+      "company": "Infosys",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q35",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "No FY2024 space-research project spending amount was found in the indexed corporate-report corpus. Limit any abstention to that corpus; do not infer whether such spending occurred.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q36",
+      "question": "What dividend amount did Infosys distribute in FY1990, using only documents indexed in this project?",
+      "company": "Infosys",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "1989-1990"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "1989-1990"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q36",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "FY1990 predates the indexed Infosys annual-report coverage, which begins at FY2014-2015. State that the dividend amount is unsupported in this project corpus; do not infer that no dividend was distributed.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q37",
+      "question": "Infosys FY2024 consolidated financial statements report revenue of INR 153,670 crore. What is the equivalent amount in INR million? Show the conversion and confirm that both amounts describe the same consolidated FY2024 revenue.",
+      "company": "Infosys",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q37",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use consolidated FY2024 revenue from operations of ₹153,670 crore (annualreport_infosys_2024_p029_t013, p. 29; annualreport_infosys_2024_p272_t320, p. 272). Convert using 1 crore = 10 million: 153,670 × 10 = ₹1,536,700 million. Both figures represent the same consolidated revenue for the year ended March 31, 2024; this is a unit conversion, not a separate reported amount.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "infosys_q37",
+        "original_question": "A statement gives an amount in INR crore while another passage expresses it in INR million. Convert both and determine whether they agree within stated precision.",
+        "reason": "Specifies the metric, amount, unit conversion, reporting scope, and period while preserving the unit-reconciliation objective."
+      }
+    },
+    {
+      "id": "infosys_q38",
+      "question": "How should Infosys FY2024 management's statement that the company was debt-free be reconciled with the annual report's standalone current lease liabilities as at March 31, 2024? Does the standalone amount establish consolidated lease liabilities?",
+      "company": "Infosys",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2023-2024"
+      ],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q38",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Distinguish management's 'debt-free' wording from its 'no outstanding borrowings' statements; the report does not define whether 'debt-free' includes lease liabilities. The standalone current lease liability was ₹678 crore as at March 31, 2024 (annualreport_infosys_2024_p209_t201, p. 209), while consolidated current lease liabilities were ₹1,959 crore (annualreport_infosys_2024_p320_t412, p. 320). Standalone data do not establish consolidated liabilities. Management also reported consolidated cash and investments of ₹39,005 crore (annualreport_infosys_2024_txt_p032_0002, p. 32); do not conflate this balance with borrowings or lease liabilities.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "infosys_q38",
+        "original_question": "How should reported borrowings, lease liabilities and cash balances be used to assess a claim that Infosys has “no debt”?",
+        "reason": "Names the period and scope of each disclosure and avoids implying that standalone lease data establish consolidated balances."
+      }
+    },
+    {
+      "id": "infosys_q39",
+      "question": "What was the latest Infosys share price on NSE as of November 10, 2026?",
+      "company": "Infosys",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q39",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "The indexed Infosys corpus contains Annual Reports only and no live, timestamped NSE quote. Do not use historical annual-report share-price references as a current quote; abstain because the corpus cannot establish the latest price as of November 10, 2026.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_q40",
+      "question": "Had Infosys announced an acquisition as of November 10, 2026? If so, identify the announcement and date.",
+      "company": "Infosys",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q40",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "The indexed corpus contains Annual Reports only; the latest indexed report describes historical acquisition events but does not establish whether an acquisition was announced as of November 10, 2026. Do not infer that none was announced; abstain absent a current company-announcement or news source.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q41",
+      "question": "What was Reliance Industries Limited consolidated revenue from operations for FY2025, in INR crore?",
+      "company": "RelianceIndustries",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q41",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify the FY2025 consolidated revenue-from-operations line in INR crore.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "replaced",
+        "predecessor_id": "ril_q41",
+        "original_question": "What was Reliance Industries Limited consolidated revenue from operations for FY2024, in INR crore?",
+        "reason": "The FY2025 report contains the same consolidated revenue-from-operations metric for FY2025."
+      }
+    },
+    {
+      "id": "ril_q42",
+      "question": "What was Reliance Industries Limited's \"Profit After Tax\" in the consolidated Statement of Profit and Loss for FY2025, in INR crore?",
+      "company": "RelianceIndustries",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q42",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the consolidated Statement of Profit and Loss line labelled \"Profit After Tax\" for FY2024-25: ₹80,787 crore (annualreport_relianceindustries_2025_p100_t214, p. 100). Do not substitute \"Profit for the year\" of ₹81,309 crore, which includes share of profit of associates and joint ventures.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "replaced",
+        "predecessor_id": "ril_q42",
+        "original_question": "What was Reliance Industries Limited consolidated profit after tax for FY2024, in INR crore?",
+        "reason": "The FY2025 report contains a consolidated Profit After Tax line for FY2025."
+      }
+    },
+    {
+      "id": "ril_q43",
+      "question": "What turnover or revenue figure did Reliance Retail report for FY2024–25, and what exact metric label does the source use?",
+      "company": "RelianceIndustries",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q43",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Do not equate segment turnover with group consolidated revenue.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q44",
+      "question": "How many 5G subscribers or users did Jio report at end of FY2024–25, and what wording does the source use?",
+      "company": "RelianceIndustries",
+      "category": "financial_metric",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q44",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Retain source definition; do not assume all users are active unless stated.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q45",
+      "question": "What was the percentage change in Reliance Industries consolidated revenue from operations from FY2024 to FY2025? Show both values and the calculation.",
+      "company": "RelianceIndustries",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2023-2024",
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q45",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the consolidated revenue-from-operations metric consistently for both years and show the percentage calculation.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "replaced",
+        "predecessor_id": "ril_q45",
+        "original_question": "What was percentage change in Reliance Industries consolidated revenue from FY2023 to FY2024? Show values and calculation.",
+        "reason": "The FY2025 consolidated statement provides the same revenue-from-operations line for FY2024 and FY2025."
+      }
+    },
+    {
+      "id": "ril_q46",
+      "question": "Using the \"Profit After Tax\" line in Reliance Industries' consolidated Statement of Profit and Loss for both FY2024 and FY2025, how did the amount change in value and percentage terms?",
+      "company": "RelianceIndustries",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2023-2024",
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q46",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the same consolidated Statement of Profit and Loss line labelled \"Profit After Tax\" for both years: ₹78,633 crore in FY2023-24 and ₹80,787 crore in FY2024-25 (annualreport_relianceindustries_2025_p100_t214, p. 100). Increase = ₹2,154 crore; percentage increase = (80,787 - 78,633) / 78,633 × 100 = approximately 2.7%. Do not substitute \"Profit for the year\" or owner-attributable profit.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "replaced",
+        "predecessor_id": "ril_q46",
+        "original_question": "How did Reliance Industries consolidated profit after tax change from FY2023 to FY2024, in value and percentage terms?",
+        "reason": "The FY2025 report presents the same consolidated Profit After Tax line for both FY2024 and FY2025."
+      }
+    },
+    {
+      "id": "ril_q47",
+      "question": "What year-over-year growth did Reliance Retail report for FY2024–25, and which revenue/turnover measure is it based on?",
+      "company": "RelianceIndustries",
+      "category": "year_over_year_comparison",
+      "financial_periods": [
+        "2023-2024",
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q47",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Confirm segment metric and comparison basis.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q48",
+      "question": "For FY2024-25, what amounts does Reliance Industries' consolidated Statement of Profit and Loss report for \"Value of Sales & Services (Revenue)\", \"Less: GST Recovered\", and \"Revenue from Operations\" (₹ crore), and how does the GST deduction reconcile the first amount to the last?",
+      "company": "RelianceIndustries",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q48",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use the consolidated Statement of Profit and Loss table (annualreport_relianceindustries_2025_p100_t214, p. 100; ₹ crore) and preserve its labels: \"Value of Sales & Services (Revenue)\" ₹10,71,174; \"Less: GST Recovered\" ₹91,038; \"Revenue from Operations\" ₹9,80,136 for FY2024-25. Reconcile as ₹10,71,174 - ₹91,038 = ₹9,80,136. Keep these distinct from the FY2023-24 comparative column.",
+      "gold": null,
+      "answer_reviews": [],
+      "revision": {
+        "status": "reworded",
+        "predecessor_id": "ril_q48",
+        "original_question": "What was year-over-year percentage change in Reliance Industries consolidated revenue from FY2023–24 to FY2024–25?",
+        "reason": "Resolves ambiguity between group value of sales/services and revenue from operations net of GST by naming the statement line, unit, scope, and periods."
+      }
+    },
+    {
+      "id": "ril_q49",
+      "question": "Which Reliance Industries business segment had the largest reported revenue for FY2024–25, and what was that segment revenue?",
+      "company": "RelianceIndustries",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q49",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Compare segment values on a consistent reporting basis.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q50",
+      "question": "What revenue did Reliance Retail report for FY2024–25, and how does it compare with group consolidated revenue for the same year?",
+      "company": "RelianceIndustries",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q50",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Keep segment and group scopes explicit; calculate share only with comparable denominators.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q51",
+      "question": "What revenue did Reliance Jio digital services business report for FY2024–25, and how is the segment defined in the source?",
+      "company": "RelianceIndustries",
+      "category": "segment_performance",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q51",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use exact segment definition; do not substitute subscriber or traffic metrics.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q52",
+      "question": "Compare FY2024–25 EBITDA performance of Reliance Retail and Digital Services with O2C. Which grew faster based on comparable reported figures?",
+      "company": "RelianceIndustries",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2023-2024",
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q52",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires EBITDA values for both periods and consistent segment definitions.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q53",
+      "question": "Using Reliance Industries reported capital expenditure and cash-flow information, what funding sources are evidenced for its investment programme? Distinguish facts from inference.",
+      "company": "RelianceIndustries",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q53",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Do not link a project to a funding source unless explicitly stated.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q54",
+      "question": "Compare reported operating performance of Jio digital services and O2C. What evidence supports a conclusion about their relative contribution to group performance?",
+      "company": "RelianceIndustries",
+      "category": "multi_evidence_comparison",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q54",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires multiple segment measures; avoid unsupported causal claims.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q55",
+      "question": "What were Reliance Retail exact daily sales on a specific festival date in FY2024–25, using only indexed annual reports and financial disclosures?",
+      "company": "RelianceIndustries",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q55",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Verify whether daily sales detail is absent from corpus.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q56",
+      "question": "What was store-by-store quarterly revenue for every Reliance Retail outlet in India in FY2024–25?",
+      "company": "RelianceIndustries",
+      "category": "insufficient_evidence",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q56",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Test realistic granular-data request; verify corpus absence.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q57",
+      "question": "If one source rounds Reliance Industries FY2024–25 consolidated revenue to ₹10.7 lakh crore and another gives an exact INR-crore figure, is the difference consistent with rounding?",
+      "company": "RelianceIndustries",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q57",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Use exact corpus figure; 1 lakh crore equals 100,000 crore; record tolerance.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q58",
+      "question": "Can Reliance Industries group revenue and Reliance Retail segment turnover be compared as if they have the same reporting scope? Explain using source definitions.",
+      "company": "RelianceIndustries",
+      "category": "conflicting_or_reconcilable_evidence",
+      "financial_periods": [
+        "2024-2025"
+      ],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2024-2025"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q58",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Tests group-versus-segment scope, not fabricated conflicting sources.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q59",
+      "question": "What is Reliance Industries share price on NSE right now, and what is its percentage change today?",
+      "company": "RelianceIndustries",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q59",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires live market data.",
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "ril_q60",
+      "question": "What are today crude-oil benchmark prices, and how are they affecting Reliance Industries refinery margins?",
+      "company": "RelianceIndustries",
+      "category": "temporal_ambiguity_or_current_information",
+      "financial_periods": [
+        "current"
+      ],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "source_question_id": "Q60",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "annotation_note": "Requires live commodity prices and current company/market evidence.",
+      "gold": null,
+      "answer_reviews": []
+    }
+  ]
+}

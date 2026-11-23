@@ -1,0 +1,1038 @@
+{
+  "draft_version": "1.0.0",
+  "status": "proposed_pending_human_review",
+  "source_benchmark": "financial_rag_60_question_benchmark.json",
+  "source_benchmark_sha256": "1a60f5e235eec5ac24ff8f2bc28c706256a5d6e6ba7de4bce56f520cf79cd0fa",
+  "company": "Infosys",
+  "case_count": 20,
+  "evidence_status_note": "Evidence chunks and source reports were inspected during preparation, but all references remain proposed_unverified pending independent human review. No reviewer identity is assigned; these annotations are not authoritative gold.",
+  "cases": [
+    {
+      "id": "infosys_q21",
+      "question": "What was Infosys consolidated revenue from operations for FY2024, in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the directly reported consolidated Revenue from operations line, not standalone revenue or Total income.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q21_a1",
+            "proposition": "Infosys consolidated Revenue from operations for FY2024 was INR 153,670 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, results table (INR crore): consolidated Revenue from operations is 153,670."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from operations",
+              "value": "153670",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q22",
+      "question": "What was Infosys's consolidated basic earnings per share (EPS) for FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The results table separates standalone and consolidated EPS. Use consolidated basic EPS, not standalone or diluted EPS.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q22_a1",
+            "proposition": "Infosys consolidated basic EPS for FY2024 was INR 63.39 per equity share (face value INR 5).",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, results table reports consolidated basic EPS of 63.39 separately from standalone EPS."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Basic earnings per share",
+              "value": "63.39",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q23",
+      "question": "What was Infosys's consolidated operating margin for FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The key financial ratios table explicitly separates standalone and consolidated operating margin.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q23_a1",
+            "proposition": "Infosys consolidated operating margin for FY2024 was 20.7%, distinct from the standalone margin of 22.3%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p073_t045",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 73 / printed p.100, key financial ratios table: standalone 22.3%, consolidated 20.7%."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Operating margin",
+              "value": "20.7",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q24",
+      "question": "What free cash flow did Infosys report for FY2024, and what unit was used?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report provides a quantified free-cash-flow figure and defines the measure. Preserve the INR crore unit and consolidated cash-flow basis.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q24_a1",
+            "proposition": "Infosys reported free cash flow of INR 23,865 crore for FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 15 / printed highlight spread pp.28-29, reports Free cash of INR 23,865 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Free cash flow",
+              "value": "23865",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q24_a2",
+            "proposition": "Free cash flow is defined as net cash provided by operating activities less capital expenditure, per the Consolidated Statement of Cash Flows prepared under IFRS.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 15 / printed highlight spread pp.28-29, footnote (4) defines free cash flow using the consolidated IFRS cash-flow statement."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q25",
+      "question": "What was Infosys's FY2024 year-over-year consolidated revenue growth in INR-reported terms?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the consolidated INR-reported growth rate. The report separately gives USD-reported and constant-currency rates; they are not interchangeable.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q25_a1",
+            "proposition": "Consolidated revenue from operations grew 4.7% year over year in INR-reported terms, from INR 146,767 crore in FY2023 to INR 153,670 crore in FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, consolidated table reports both revenues and 4.7% YoY growth."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "INR-reported revenue growth",
+              "value": "4.7",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2022-2023",
+                "2023-2024"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q25_a2",
+            "proposition": "The report distinguishes 1.4% constant-currency growth and 1.9% USD-reported revenue growth from the requested 4.7% INR-reported rate.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p071_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 71 / printed p.98, explains reported versus constant-currency bases and reports 1.9% USD and 1.4% constant-currency growth."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, reports 4.7% consolidated INR-basis revenue growth."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2022-2023",
+                "2023-2024"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q26",
+      "question": "What total large-deal contract value (TCV) did Infosys report for FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The annual report reports total contract value for large deals won during the year. This deal-value measure is not recognized revenue.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q26_a1",
+            "proposition": "Infosys reported FY2024 large-deal total contract value of US$17.7 billion.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p017_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 17 / printed spread pp.32-33, reports US$17.7 billion of large deals."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 15 / printed highlight spread pp.28-29, labels 17.7 as total contract value in US$ billion."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Large-deal total contract value",
+              "value": "17.7",
+              "currency": "USD",
+              "unit": "currency",
+              "scale": "billion",
+              "entity_scope": "unspecified",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q27",
+      "question": "What was the percentage change in Infosys's consolidated basic EPS from FY2023 to FY2024? Show both reported EPS values.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use consolidated basic EPS values for both years and divide the change by the FY2023 consolidated value.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q27_a1",
+            "proposition": "Consolidated basic EPS was INR 57.63 in FY2023 and INR 63.39 in FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, table separates scopes and reports consolidated basic EPS of 57.63 and 63.39."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2022-2023",
+                "2023-2024"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q27_a2",
+            "proposition": "EPS increased by INR 5.76 per share; (63.39 - 57.63) / 57.63 x 100 = 9.994794...%, approximately 10.0%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, supplies the consolidated EPS inputs; percentage independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "YoY growth in consolidated basic EPS",
+              "value": "10.0",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2022-2023",
+                "2023-2024"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q28",
+      "question": "What was Infosys's FY2024 year-over-year consolidated revenue growth in INR terms, comparing reported growth with constant-currency growth?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report separately presents INR-reported and constant-currency growth. Subtract the rates for a percentage-point difference; do not mix in USD-reported growth.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q28_a1",
+            "proposition": "FY2024 consolidated revenue growth was 4.7% in reported INR terms and 1.4% in constant-currency terms, a difference of 3.3 percentage points.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, consolidated INR-basis growth is 4.7%."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p071_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 71 / printed p.98, reports 1.4% constant-currency growth and explains the basis."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Difference between INR-reported and constant-currency growth",
+              "value": "3.3",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2022-2023",
+                "2023-2024"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q29",
+      "question": "Which geographic segment contributed the largest share of Infosys revenue in FY2024, and what share did it contribute?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The consolidated geographic-revenue table is based on customer domicile. North America is largest; its share is calculated against the table total.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q29_a1",
+            "proposition": "FY2024 geographic revenue by customer domicile was INR 92,411 crore for North America out of INR 153,670 crore total.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p317_t406",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 317 / printed p.344, consolidated geographic table reports North America 92,411 crore and total 153,670 crore."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p317_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 317 / printed p.344, states geographical revenue is based on customer domicile."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q29_a2",
+            "proposition": "North America represented approximately 60.1%: 92,411 / 153,670 x 100 = 60.1360...%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p317_t406",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 317 / printed p.344, provides the numerator and total; share independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated North America share of consolidated revenue by geography",
+              "value": "60.1",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q30",
+      "question": "Which reported business segment contributed the largest share of Infosys consolidated revenue from operations in FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the report?s Business segments table, not industry verticals. Financial Services has the highest segment revenue; share is calculated against consolidated revenue from operations.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q30_a1",
+            "proposition": "Financial Services was the largest FY2024 business segment by revenue at INR 42,158 crore; the consolidated segment table total was INR 153,670 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p336_t445",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 336 / printed p.363, Business segments table reports Financial Services revenue of 42,158 crore, above the other segments, and total 153,670 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Financial Services segment revenue",
+              "value": "42158",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q30_a2",
+            "proposition": "Financial Services contributed approximately 27.4% of consolidated revenue: 42,158 / 153,670 x 100 = 27.4341...%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p336_t445",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 336 / printed p.363, provides Financial Services segment revenue and total."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, reports consolidated revenue from operations of 153,670 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated Financial Services share of consolidated revenue",
+              "value": "27.4",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q31",
+      "question": "What quantitative measure did Infosys disclose for digital revenue in FY2024? If no comparable digital-versus-core split is disclosed, state that limitation.",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "Core and digital offerings are grouped together as software-related services, and the business-segment table has no comparable digital-versus-core revenue line. Evidence supports the limitation, not a standalone digital amount.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q31_a1",
+            "proposition": "Infosys describes core and digital offerings together as software-related services; FY2024 consolidated segment revenue does not separately quantify digital revenue versus core revenue.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p315_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 315 / printed p.342, consolidated accounting policy groups core and digital offerings as software-related services."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p336_t445",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 336 / printed p.363, consolidated Business segments revenue table does not report a digital-versus-core split."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q32",
+      "question": "Using Infosys FY2024 consolidated revenue and profit after tax, calculate net profit margin and show formula.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use consolidated Profit after tax and Revenue from operations, both in INR crore; calculate the margin from those comparable FY2024 amounts.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q32_a1",
+            "proposition": "FY2024 consolidated Profit after tax was INR 26,248 crore and Revenue from operations was INR 153,670 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, consolidated table reports PAT 26,248 crore and Revenue from operations 153,670 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q32_a2",
+            "proposition": "Calculated net profit margin was approximately 17.1%: 26,248 / 153,670 x 100 = 17.080757...%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, provides both consolidated inputs and separately reports 17.1% net profit margin; calculation independently recomputed."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated consolidated net profit margin",
+              "value": "17.1",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q33",
+      "question": "For FY2024, what consolidated cash and investments did Infosys report as at March 31, 2024, and what current lease liability amount does its standalone statement report? Can these figures be compared as same-scope balances?",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The balances have different scopes and measures. State both and explain they cannot be treated as same-scope balances.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q33_a1",
+            "proposition": "At March 31, 2024, consolidated cash and investments were INR 39,005 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p032_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 32 / printed p.59, reports consolidated cash and investments of 39,005 crore as at March 31, 2024."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Cash and investments",
+              "value": "39005",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q33_a2",
+            "proposition": "At March 31, 2024, standalone current lease liabilities were INR 678 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p209_t201",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 209 / printed p.236, standalone table reports current lease liabilities of 678 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Current lease liabilities",
+              "value": "678",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "standalone",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q33_a3",
+            "proposition": "These are not same-scope balances: one is consolidated cash and investments and one is a standalone current liability; the standalone amount does not establish consolidated lease liabilities.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p032_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 32 / printed p.59, distinguishes standalone and consolidated balance measures."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p209_t201",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 209 / printed p.236, labels the lease-liability table as standalone."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p320_t412",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 320 / printed p.347, separately reports consolidated current lease liabilities of 1,959 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q34",
+      "question": "What does Infosys FY2024 large-deal TCV indicate about potential future work, and why is it not FY2024 recognized revenue?",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Large-deal TCV and revenue recognition are distinct measures. Revenue recognition follows transfer of control/performance obligations; do not imply guaranteed conversion timing or amount.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q34_a1",
+            "proposition": "Infosys reported US$17.7 billion of large-deal TCV in FY2024; this deal-value disclosure is not FY2024 recognized revenue.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p017_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 17 / printed spread pp.32-33, reports US$17.7 billion of large deals won."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 15 / printed highlight spread pp.28-29, labels 17.7 as total contract value."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Large-deal total contract value",
+              "value": "17.7",
+              "currency": "USD",
+              "unit": "currency",
+              "scale": "billion",
+              "entity_scope": "unspecified",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q34_a2",
+            "proposition": "Consolidated revenue is recognized upon transfer of control of promised products or services (performance obligations), not automatically at the full TCV when the deal is signed.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p315_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 315 / printed p.342, consolidated policy states revenue is recognized on transfer of control of performance obligations to customers."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q35",
+      "question": "How much did Infosys spend specifically on space-research projects in FY2024, using the indexed corporate-report corpus?",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "abstain",
+        "action_rationale": "No FY2024 space-research-project spending amount was located in the indexed FY2024 report. This does not establish whether such spending occurred or whether Infosys disclosed it elsewhere.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "infosys_q36",
+      "question": "What dividend amount did Infosys distribute in FY1990, using only documents indexed in this project?",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "abstain",
+        "action_rationale": "FY1990 predates indexed Infosys annual-report coverage, which begins at FY2014-15. The requested dividend amount is unsupported in this corpus; do not infer no dividend was distributed.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "infosys_q37",
+      "question": "Infosys FY2024 consolidated financial statements report revenue of INR 153,670 crore. What is the equivalent amount in INR million? Show the conversion and confirm that both amounts describe the same consolidated FY2024 revenue.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Convert the reported consolidated FY2024 revenue using 1 crore = 10 million. This is a unit conversion, not a separately reported result.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q37_a1",
+            "proposition": "Consolidated FY2024 Revenue from operations of INR 153,670 crore equals INR 1,536,700 million (153,670 x 10).",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p029_t013",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 29 / printed p.56, reports consolidated revenue from operations of 153,670 crore."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p272_t320",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 272 / printed p.299, consolidated Statement of Profit and Loss independently reports 153,670 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from operations (unit-converted)",
+              "value": "1536700",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "million",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q38",
+      "question": "How should Infosys FY2024 management's statement that the company was debt-free be reconciled with the annual report's standalone current lease liabilities as at March 31, 2024? Does the standalone amount establish consolidated lease liabilities?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "?Debt-free? is not defined as excluding lease liabilities in the management statement. Report standalone and consolidated lease balances separately; cash/investments are a different measure.",
+        "expected_assertions": [
+          {
+            "assertion_id": "infosys_q38_a1",
+            "proposition": "Management stated that Infosys continued to be debt-free; the cited statement does not specify whether this includes lease liabilities.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p032_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 32 / printed p.59, management says the Company continues to be debt-free, without defining lease-liability treatment."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q38_a2",
+            "proposition": "At March 31, 2024, current lease liabilities were INR 678 crore standalone and INR 1,959 crore consolidated.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p209_t201",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 209 / printed p.236, standalone current lease liabilities 678 crore."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p320_t412",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 320 / printed p.347, consolidated current lease liabilities 1,959 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "infosys_q38_a3",
+            "proposition": "The standalone 678 crore amount cannot establish the consolidated balance, which is separately reported as 1,959 crore. Consolidated cash and investments of 39,005 crore are not a measure of zero borrowings or lease liabilities.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_infosys_2024_p209_t201",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 209 / printed p.236, provides standalone scope."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_p320_t412",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 320 / printed p.347, provides consolidated scope."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p032_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Infosys Annual Report 2023-24, PDF page 32 / printed p.59, reports cash and investments separately from debt-free wording."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "infosys_q39",
+      "question": "What was the latest Infosys share price on NSE as of November 10, 2026?",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed Infosys corpus contains annual reports, not a live timestamped NSE quote for November 10, 2026. Historical market-price references cannot establish the latest price or today?s change.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "infosys_q40",
+      "question": "Had Infosys announced an acquisition as of November 10, 2026? If so, identify the announcement and date.",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed corpus contains annual reports, not a current company-announcement feed. Historical acquisition descriptions cannot establish whether an acquisition had been announced as of November 10, 2026.",
+        "expected_assertions": []
+      }
+    }
+  ]
+}

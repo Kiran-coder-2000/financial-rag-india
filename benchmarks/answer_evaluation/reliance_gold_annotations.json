@@ -1,0 +1,1207 @@
+{
+  "draft_version": "1.0.0",
+  "status": "proposed_pending_human_review",
+  "source_benchmark": "financial_rag_60_question_benchmark.json",
+  "source_benchmark_sha256": "1a60f5e235eec5ac24ff8f2bc28c706256a5d6e6ba7de4bce56f520cf79cd0fa",
+  "company": "RelianceIndustries",
+  "case_count": 20,
+  "evidence_status_note": "Evidence chunks and source reports were inspected during preparation, but all references remain proposed_unverified pending independent human review. No reviewer identity is assigned; these annotations are not authoritative gold.",
+  "cases": [
+    {
+      "id": "ril_q41",
+      "question": "What was Reliance Industries Limited consolidated revenue from operations for FY2025, in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the exact consolidated Revenue from Operations line in the FY2025 statement, not the higher gross Value of Sales & Services or total income.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q41_a1",
+            "proposition": "Reliance Industries consolidated Revenue from Operations for FY2024-25 was INR 980,136 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, consolidated Statement of Profit and Loss (INR crore): Revenue from Operations is 980,136."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from Operations",
+              "value": "980136",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q42",
+      "question": "What was Reliance Industries Limited's \"Profit After Tax\" in the consolidated Statement of Profit and Loss for FY2025, in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The consolidated statement has a distinct Profit After Tax line. Do not substitute Profit for the year, which adds share of profit of associates and joint ventures.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q42_a1",
+            "proposition": "Reliance Industries consolidated Statement of Profit and Loss reports Profit After Tax of INR 80,787 crore for FY2024-25.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, consolidated Statement of Profit and Loss labels Profit After Tax at 80,787 crore; Profit for the year is separately 81,309 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Profit After Tax",
+              "value": "80787",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q43",
+      "question": "What turnover or revenue figure did Reliance Retail report for FY2024–25, and what exact metric label does the source use?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Preserve the report labels. The narrative calls the amount Gross Revenue; the consolidated segment table labels it Value of Sales and Services (Revenue), before the separate GST deduction.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q43_a1",
+            "proposition": "Reliance Retail FY2024-25 Gross Revenue was INR 330,943 crore; the primary segment table labels it Value of Sales and Services (Revenue).",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p007_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.7 / printed p.11, states Retail Gross Revenue of INR 330,943 crore."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, Primary Segment Information labels Retail 330,943 crore as Value of Sales and Services (Revenue)."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Retail Value of Sales and Services (Revenue) / Gross Revenue",
+              "value": "330943",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q43_a2",
+            "proposition": "The same table separately reports Retail GST recovered of INR 39,900 crore and Revenue from Operations (Net of GST) of INR 291,043 crore; these are not the gross figure.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, Retail column: Value of Sales and Services 330,943 less GST Recovered 39,900 equals Revenue from Operations (Net of GST) 291,043."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q44",
+      "question": "How many 5G subscribers or users did Jio report at end of FY2024–25, and what wording does the source use?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report explicitly says ?5G users? as of March 2025. Preserve the approximation; do not relabel the count as active subscribers.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q44_a1",
+            "proposition": "As of March 2025, Jio had approximately 191 million 5G users on its network.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p008_0007",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.8 / printed p.12: ?As of March 2025, Jio had ~191 million 5G users on its network.?"
+              }
+            ],
+            "numerical_reference": {
+              "metric": "5G users on Jio network",
+              "value": "191",
+              "currency": null,
+              "unit": "count",
+              "scale": "million",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q45",
+      "question": "What was the percentage change in Reliance Industries consolidated revenue from operations from FY2024 to FY2025? Show both values and the calculation.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Both periods use the same consolidated Revenue from Operations line, net of GST. Changes are calculated from the statement values.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q45_a1",
+            "proposition": "Consolidated Revenue from Operations was INR 914,472 crore in FY2023-24 and INR 980,136 crore in FY2024-25.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, comparative consolidated statement reports 914,472 crore and 980,136 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q45_a2",
+            "proposition": "Revenue from Operations increased by INR 65,664 crore; 65,664 / 914,472 x 100 = 7.180536...%, approximately 7.2% year over year.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, supplies comparative values; change and growth independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated YoY growth in consolidated Revenue from Operations",
+              "value": "7.2",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q46",
+      "question": "Using the \"Profit After Tax\" line in Reliance Industries' consolidated Statement of Profit and Loss for both FY2024 and FY2025, how did the amount change in value and percentage terms?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the same consolidated Statement of Profit and Loss line labelled Profit After Tax for both years, not Profit for the year or owner-attributable profit.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q46_a1",
+            "proposition": "Consolidated Profit After Tax was INR 78,633 crore in FY2023-24 and INR 80,787 crore in FY2024-25.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, consolidated statement reports Profit After Tax of 78,633 crore and 80,787 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q46_a2",
+            "proposition": "Consolidated Profit After Tax increased by INR 2,154 crore; 2,154 / 78,633 x 100 = 2.739307...%, approximately 2.7%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, provides both inputs; change and growth independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated YoY growth in consolidated Profit After Tax",
+              "value": "2.7",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q47",
+      "question": "What year-over-year growth did Reliance Retail report for FY2024–25, and which revenue/turnover measure is it based on?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The narrative explicitly states Retail Gross Revenue and YoY growth. The segment table provides comparison amounts and the source?s Value of Sales and Services label.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q47_a1",
+            "proposition": "Reliance Retail reported FY2024-25 Gross Revenue of INR 330,943 crore and 7.9% growth over the prior year.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p007_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.7 / printed p.11, reports Retail Gross Revenue 330,943 crore and 7.9% growth."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Reported YoY growth in Retail Gross Revenue",
+              "value": "7.9",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q47_a2",
+            "proposition": "Retail Value of Sales and Services was INR 306,848 crore in FY2023-24 and INR 330,943 crore in FY2024-25; calculated growth is approximately 7.9%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t335",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, FY2023-24 comparative table reports Retail Value of Sales and Services of 306,848 crore."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, FY2024-25 Retail Value of Sales and Services is 330,943 crore."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q48",
+      "question": "For FY2024-25, what amounts does Reliance Industries' consolidated Statement of Profit and Loss report for \"Value of Sales & Services (Revenue)\", \"Less: GST Recovered\", and \"Revenue from Operations\" (₹ crore), and how does the GST deduction reconcile the first amount to the last?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use FY2024-25 consolidated Statement of Profit and Loss labels exactly. GST recovered reconciles gross Value of Sales & Services to Revenue from Operations.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q48_a1",
+            "proposition": "For FY2024-25, consolidated Value of Sales & Services (Revenue) was INR 1,071,174 crore, Less: GST Recovered was INR 91,038 crore, and Revenue from Operations was INR 980,136 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, consolidated Statement of Profit and Loss (INR crore) reports all three exact row labels and values."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from Operations (Net of GST)",
+              "value": "980136",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q48_a2",
+            "proposition": "GST reconciliation: 1,071,174 - 91,038 = 980,136 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, supplies the gross amount, GST recovered and net revenue; subtraction independently recomputed."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "GST Recovered",
+              "value": "91038",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q49",
+      "question": "Which Reliance Industries business segment had the largest reported revenue for FY2024–25, and what was that segment revenue?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Compare the same Value of Sales and Services metric across reportable primary segments. O2C is largest; do not mix gross and net-of-GST lines.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q49_a1",
+            "proposition": "O2C had the largest FY2024-25 primary-segment Value of Sales and Services (Revenue), INR 626,921 crore, compared with Retail 330,943 crore, Digital Services 154,119 crore, Oil and Gas 25,211 crore, and Others 55,859 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, Primary Segment Information reports the same gross-value metric for all segments; O2C is highest."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "O2C Value of Sales and Services",
+              "value": "626921",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q50",
+      "question": "What revenue did Reliance Retail report for FY2024–25, and how does it compare with group consolidated revenue for the same year?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Keep Retail segment and group consolidated scopes explicit. Compare the same net-of-GST Revenue from Operations line; label the share as calculated.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q50_a1",
+            "proposition": "Retail FY2024-25 Value of Sales and Services was INR 330,943 crore (external turnover 326,872 plus intersegment turnover 4,071); consolidated gross Value of Sales and Services was INR 1,071,174 crore after eliminations.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, reports Retail external/intersegment turnover and group total."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, says consolidated segment information includes subsidiary businesses and total value eliminates intersegment turnover."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q50_a2",
+            "proposition": "On the same net-of-GST measure, Retail Revenue from Operations was INR 291,043 crore versus consolidated Revenue from Operations of INR 980,136 crore; the calculated ratio is approximately 29.7%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, reports Retail net-of-GST revenue 291,043 crore and consolidated total 980,136 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Retail Revenue from Operations as share of consolidated Revenue from Operations",
+              "value": "29.7",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q51",
+      "question": "What revenue did Reliance Jio digital services business report for FY2024–25, and how is the segment defined in the source?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report gives Digital Services revenue and a segment definition. Preserve both gross and net-of-GST figures as distinct measures.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q51_a1",
+            "proposition": "FY2024-25 Digital Services Value of Sales and Services was INR 154,119 crore; Revenue from Operations (Net of GST) was INR 131,336 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, segment table reports Digital Services gross revenue 154,119 crore and net revenue 131,336 crore."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p040_0014",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.40 / printed p.77, narrative reports Digital Services revenue of 154,119 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Digital Services Value of Sales and Services",
+              "value": "154119",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q51_a2",
+            "proposition": "Digital Services is defined as provision of a range of digital services; cited narrative identifies mobility, homes, enterprise services and digital platforms as business drivers.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, identifies Digital Services among principal reporting segments."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0004",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, defines the segment as provision of a range of digital services."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p008_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.8 / printed p.12, describes mobility, homes, enterprise services and digital platforms as drivers."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q52",
+      "question": "Compare FY2024–25 EBITDA performance of Reliance Retail and Digital Services with O2C. Which grew faster based on comparable reported figures?",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Comparable FY2024-25 year-over-year EBITDA growth rates are directly reported for all three businesses. Digital Services grew fastest; O2C declined.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q52_a1",
+            "proposition": "FY2024-25 EBITDA growth was 14.7% for Digital Services, 8.6% for Retail and negative 11.9% for O2C; Digital Services grew fastest.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, reports segment EBITDA growth of 14.7% Digital Services, 8.6% Retail and decline of 11.9% O2C."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Digital Services YoY EBITDA growth",
+              "value": "14.7",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": [
+                "2023-2024",
+                "2024-2025"
+              ],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q53",
+      "question": "Using Reliance Industries reported capital expenditure and cash-flow information, what funding sources are evidenced for its investment programme? Distinguish facts from inference.",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "The report states FY2024-25 capex was adequately covered by cash profits and describes broad investment destinations. It does not allocate the source to each individual project.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q53_a1",
+            "proposition": "FY2024-25 capex was INR 131,107 crore and was described as adequately covered by cash profits.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0008",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, reports capex of 131,107 crore, adequately covered by cash profits."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Capital expenditure",
+              "value": "131107",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q53_a2",
+            "proposition": "Consolidated cash profit was INR 146,917 crore; investments were largely directed to O2C projects, Retail expansion, Digital Services infrastructure and New Energy manufacturing assets, without a project-specific funding allocation.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, reports consolidated cash profit of 146,917 crore."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0008",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, describes investment destinations and aggregate funding statement."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Consolidated cash profit",
+              "value": "146917",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q54",
+      "question": "Compare reported operating performance of Jio digital services and O2C. What evidence supports a conclusion about their relative contribution to group performance?",
+      "candidate_expected_action": "partial",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "The report directly supports separate comparisons: O2C has higher gross Value of Sales and Services, while Digital Services has higher EBITDA. These differently defined segment measures support a qualified comparison, but do not establish a single overall or causal ranking of each segment?s relative contribution to group performance.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q54_a1",
+            "proposition": "FY2024-25 gross Value of Sales and Services was INR 626,921 crore for O2C and INR 154,119 crore for Digital Services, so O2C was larger by this revenue measure.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, primary segment table reports both gross segment revenues."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0004",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, defines O2C and Digital Services reporting segments."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a2",
+            "proposition": "FY2024-25 Digital Services EBITDA was INR 65,001 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p040_0014",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.40 / printed p.77, reports Digital Services EBITDA of 65,001 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Digital Services EBITDA",
+              "value": "65001",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a3",
+            "proposition": "FY2024-25 O2C EBITDA was INR 54,988 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p012_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.12 / printed p.21, reports O2C EBITDA of 54,988 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "O2C EBITDA",
+              "value": "54988",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a4",
+            "proposition": "Digital Services EBITDA exceeded O2C EBITDA by INR 10,013 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p040_0014",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for Digital Services EBITDA input; difference independently calculated."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p012_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for O2C EBITDA input; difference independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Difference between Digital Services and O2C EBITDA",
+              "value": "10013",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a5",
+            "proposition": "Digital Services EBITDA was approximately 35.4% of consolidated EBITDA: 65,001 / 183,422 x 100 = 35.4379...%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p040_0014",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for the Digital Services EBITDA numerator."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for consolidated EBITDA denominator of 183,422 crore; ratio independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Digital Services EBITDA share of consolidated EBITDA",
+              "value": "35.4",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a6",
+            "proposition": "O2C EBITDA was approximately 30.0% of consolidated EBITDA: 54,988 / 183,422 x 100 = 29.9790...%.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p012_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for the O2C EBITDA numerator."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Source for consolidated EBITDA denominator of 183,422 crore; ratio independently calculated."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "O2C EBITDA share of consolidated EBITDA",
+              "value": "30.0",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q54_a7",
+            "proposition": "Revenue and EBITDA are distinct measures; the reported comparisons do not establish one undifferentiated or causal ranking of each segment?s overall contribution to group performance.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, reports segment Value of Sales and Services and segment results as distinct measures, but no overall or causal contribution ranking."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, reports segment EBITDA growth and consolidated EBITDA separately, not an overall segment-contribution ranking."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q55",
+      "question": "What were Reliance Retail exact daily sales on a specific festival date in FY2024–25, using only indexed annual reports and financial disclosures?",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "abstain",
+        "action_rationale": "No exact daily Retail sales value for a specified FY2024-25 festival date was located in the indexed FY2024-25 report. This does not establish whether the company measured or disclosed it elsewhere.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "ril_q56",
+      "question": "What was store-by-store quarterly revenue for every Reliance Retail outlet in India in FY2024–25?",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "abstain",
+        "action_rationale": "The indexed FY2024-25 report gives aggregate segment results and store counts but no quarterly revenue schedule for every individual Retail outlet. Do not infer outlet values from segment totals.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "ril_q57",
+      "question": "If one source rounds Reliance Industries FY2024–25 consolidated revenue to ₹10.7 lakh crore and another gives an exact INR-crore figure, is the difference consistent with rounding?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The exact consolidated gross Value of Sales & Services amount is INR 1,071,174 crore, which is 10.71174 lakh crore and rounds to 10.7 lakh crore. This applies only to the same gross metric; net-of-GST Revenue from Operations is different.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q57_a1",
+            "proposition": "The exact FY2024-25 consolidated Value of Sales & Services was INR 1,071,174 crore. INR 10.7 lakh crore equals INR 1,070,000 crore, a difference of INR 1,174 crore; 1,071,174 / 100,000 = 10.71174 lakh crore, which rounds to 10.7 lakh crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, reports consolidated Value of Sales & Services of 1,071,174 crore."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p005_0006",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.5 / printed p.6, reports consolidated revenue of 1,071,174 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Consolidated Value of Sales and Services",
+              "value": "1071174",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q57_a2",
+            "proposition": "The same statement reports Revenue from Operations (Net of GST) of INR 980,136 crore; this is not the amount that rounds to 10.7 lakh crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p100_t214",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.100 / printed spread pp.196-197, distinguishes gross 1,071,174, GST 91,038 and net 980,136 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from Operations (Net of GST)",
+              "value": "980136",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2024-2025"
+            },
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q58",
+      "question": "Can Reliance Industries group revenue and Reliance Retail segment turnover be compared as if they have the same reporting scope? Explain using source definitions.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Retail is one consolidated reporting segment; group revenue is the consolidated total after intersegment eliminations. State labels and scopes rather than treating them as same-scope balances.",
+        "expected_assertions": [
+          {
+            "assertion_id": "ril_q58_a1",
+            "proposition": "The report identifies Retail as a primary segment and states segment information is reported on consolidated basis including subsidiary businesses.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, identifies principal reporting segments including Retail."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, says segment information is consolidated and total Value of Sales and Services eliminates intersegment turnover."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "ril_q58_a2",
+            "proposition": "FY2024-25 Retail Value of Sales and Services was INR 330,943 crore, while group consolidated Value of Sales and Services was INR 1,071,174 crore; the first is segment-level and the second group total after eliminations.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_p130_t334",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, reports the Retail amount and group total."
+              },
+              {
+                "chunk_id": "annualreport_relianceindustries_2025_txt_p130_0003",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Reliance Industries Integrated Annual Report 2024-25, PDF p.130 / printed p.257, footnote explains elimination of intersegment turnover."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": [
+                "2024-2025"
+              ],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "ril_q59",
+      "question": "What is Reliance Industries share price on NSE right now, and what is its percentage change today?",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed Reliance corpus contains annual reports, not a live timestamped NSE quote. Historical annual-report information cannot establish the latest price or today?s percentage change.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "ril_q60",
+      "question": "What are today crude-oil benchmark prices, and how are they affecting Reliance Industries refinery margins?",
+      "candidate_expected_action": "current_information_unavailable",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed annual reports do not provide live crude benchmark prices or current refinery-margin causality. Current commodity-market and company/market evidence is absent.",
+        "expected_assertions": []
+      }
+    }
+  ]
+}

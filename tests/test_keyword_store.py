@@ -34,7 +34,13 @@ def _chunk(chunk_id, text, **overrides):
     return chunk
 
 
-def _annotation(chunk, keywords=None, description="Revenue reporting details."):
+def _annotation(
+    chunk,
+    keywords=None,
+    description="Revenue reporting details.",
+    status="success",
+    error=None,
+):
     from src.keyword_schema import ChunkKeywordAnnotation
 
     return ChunkKeywordAnnotation(
@@ -47,10 +53,14 @@ def _annotation(chunk, keywords=None, description="Revenue reporting details."):
         page=chunk["page"],
         section=chunk["section"],
         chunk_type=chunk["chunk_type"],
-        keywords=keywords or ["consolidated revenue", "FY2026", "revenue growth"],
-        description=description,
+        keywords=(
+            keywords if keywords is not None
+            else ["consolidated revenue", "FY2026", "revenue growth"]
+        ),
+        description=description if status == "success" else None,
         annotation_model="fake-model",
-        annotation_status="success",
+        annotation_status=status,
+        annotation_error=error,
     )
 
 
@@ -83,10 +93,13 @@ class FakeCollection:
 
     def get(self, ids=None, include=None, **kwargs):
         ids = [record_id for record_id in (ids or []) if record_id in self.records]
-        return {
+        result = {
             "ids": ids,
             "metadatas": [self.records[record_id]["metadata"] for record_id in ids],
         }
+        if "embeddings" in (include or []):
+            result["embeddings"] = [self.records[record_id]["embedding"] for record_id in ids]
+        return result
 
     def count(self):
         return len(self.records)
@@ -145,6 +158,31 @@ def test_keyword_vector_index_uses_stable_chunk_ids_and_original_metadata(tmp_pa
     assert model.calls == [_keyword_document(annotation)]
 
 
+def test_keyword_vector_index_excludes_skipped_and_failed_annotations(tmp_path):
+    skipped_chunk = _chunk("skipped", "Cover page")
+    failed_chunk = _chunk("failed", "Revenue data")
+    annotations = [
+        _annotation(skipped_chunk, keywords=[], status="skipped"),
+        _annotation(failed_chunk, keywords=[], status="failed", error="API failure"),
+    ]
+    client = FakeClient()
+    model = FakeModel()
+
+    summary = index_keyword_vectors(
+        annotations,
+        {"skipped": skipped_chunk, "failed": failed_chunk},
+        persist_directory=tmp_path / "keyword_db",
+        client=client,
+        model=model,
+    )
+
+    assert summary["skipped_count"] == 1
+    assert summary["failed_count"] == 1
+    assert summary["indexed_count"] == 0
+    assert client.collections == {}
+    assert model.calls == []
+
+
 def test_keyword_vector_index_skips_unchanged_ids_without_loading_model(tmp_path, monkeypatch):
     chunk = _chunk("stable-id", "Original source passage.")
     annotation = _annotation(chunk)
@@ -185,6 +223,54 @@ def test_keyword_vector_index_updates_changed_annotation_without_duplicate_ids(t
     assert summary["updated_count"] == 1
     assert client.collections[DEFAULT_KEYWORD_COLLECTION].count() == 1
     assert "profit after tax" in client.collections[DEFAULT_KEYWORD_COLLECTION].records["stable-id"]["document"]
+
+
+def test_keyword_vector_index_refreshes_metadata_without_reembedding(tmp_path):
+    chunk = _chunk("stable-id", "Original source passage.")
+    annotation = _annotation(chunk)
+    client = FakeClient()
+    model = FakeModel()
+    index_keyword_vectors(
+        [annotation], {"stable-id": chunk}, persist_directory=tmp_path / "keyword_db",
+        client=client, model=model,
+    )
+    changed = {**chunk, "page": 99, "section": "Changed section"}
+    changed_annotation = _annotation(changed)
+    before_calls = len(model.calls)
+
+    summary = index_keyword_vectors(
+        [changed_annotation], {"stable-id": changed}, persist_directory=tmp_path / "keyword_db",
+        client=client, model=model,
+    )
+
+    record = client.collections[DEFAULT_KEYWORD_COLLECTION].records["stable-id"]
+    assert summary["updated_count"] == 1
+    assert len(model.calls) == before_calls
+    assert record["metadata"]["page"] == 99
+    assert record["metadata"]["section"] == "Changed section"
+
+
+def test_keyword_vector_index_refreshes_legacy_record_without_metadata_fingerprint(tmp_path):
+    chunk = _chunk("legacy", "Original source passage.")
+    annotation = _annotation(chunk)
+    client = FakeClient()
+    index_keyword_vectors(
+        [annotation], {"legacy": chunk}, persist_directory=tmp_path / "keyword_db",
+        client=client, model=FakeModel(),
+    )
+    record = client.collections[DEFAULT_KEYWORD_COLLECTION].records["legacy"]
+    record["metadata"].pop("keyword_metadata_sha256", None)
+    changed = {**chunk, "company": "TataConsultancyServices"}
+    changed_annotation = _annotation(changed)
+    model = FakeModel()
+
+    summary = index_keyword_vectors(
+        [changed_annotation], {"legacy": changed}, persist_directory=tmp_path / "keyword_db",
+        client=client, model=model,
+    )
+
+    assert summary["updated_count"] == 1
+    assert client.collections[DEFAULT_KEYWORD_COLLECTION].records["legacy"]["metadata"]["company"] == "TataConsultancyServices"
 
 
 def test_keyword_vector_index_refuses_baseline_collection_and_path(tmp_path):
@@ -241,6 +327,75 @@ def test_lexical_index_incremental_runs_are_stable_and_filters_are_exact(tmp_pat
     assert second["unchanged_count"] == 1
     assert len(result) == 1 and result[0].chunk_id == "c1"
     assert other_company == []
+
+
+def test_lexical_index_excludes_skipped_and_failed_annotations(tmp_path):
+    skipped_chunk = _chunk("skipped", "Cover page")
+    failed_chunk = _chunk("failed", "Revenue data")
+    index = KeywordLexicalIndex(
+        tmp_path / "keywords.sqlite",
+        {"skipped": skipped_chunk, "failed": failed_chunk},
+    )
+    annotations = [
+        _annotation(skipped_chunk, keywords=[], status="skipped"),
+        _annotation(failed_chunk, keywords=[], status="failed", error="API failure"),
+    ]
+
+    summary = index.index_annotations(annotations)
+
+    assert summary["skipped_count"] == 1
+    assert summary["failed_count"] == 1
+    assert summary["indexed_count"] == 0
+    with index._connect() as connection:
+        assert connection.execute("SELECT COUNT(*) FROM keyword_records").fetchone()[0] == 0
+        assert connection.execute("SELECT COUNT(*) FROM keyword_search").fetchone()[0] == 0
+
+
+def test_lexical_index_metadata_only_update_refreshes_table_and_fts_filters(tmp_path):
+    chunk = _chunk("c1", "The consolidated revenue rose.")
+    index = KeywordLexicalIndex(tmp_path / "keywords.sqlite", {"c1": chunk})
+    annotation = _annotation(chunk)
+    index.index_annotations([annotation])
+    changed = {**chunk, "company": "TataConsultancyServices", "page": 99}
+    changed_annotation = _annotation(changed)
+    index.source_chunks_by_id = {"c1": changed}
+
+    summary = index.index_annotations([changed_annotation])
+    new_results = index.search("revenue", company="TataConsultancyServices")
+    old_results = index.search("revenue", company="Infosys")
+
+    assert summary["updated_count"] == 1
+    assert [result.chunk_id for result in new_results] == ["c1"]
+    assert old_results == []
+    assert new_results[0].chunk["page"] == 99
+
+
+def test_lexical_index_rebuilds_missing_fts_row(tmp_path):
+    chunk = _chunk("c1", "The consolidated revenue rose.")
+    index = KeywordLexicalIndex(tmp_path / "keywords.sqlite", {"c1": chunk})
+    annotation = _annotation(chunk)
+    index.index_annotations([annotation])
+    with index._connect() as connection:
+        connection.execute("DELETE FROM keyword_search WHERE chunk_id = ?", ("c1",))
+
+    summary = index.index_annotations([annotation])
+
+    assert summary["updated_count"] == 1
+    assert [result.chunk_id for result in index.search("revenue")] == ["c1"]
+
+
+def test_lexical_index_rolls_back_partial_batch_on_failure(tmp_path):
+    first = _chunk("first", "revenue first")
+    second = _chunk("second", "revenue second")
+    index = KeywordLexicalIndex(tmp_path / "keywords.sqlite", {"first": first})
+    annotations = [_annotation(first), _annotation(second)]
+
+    with pytest.raises(KeywordIndexError, match="Unknown source chunk ID"):
+        index.index_annotations(annotations)
+
+    with index._connect() as connection:
+        assert connection.execute("SELECT COUNT(*) FROM keyword_records").fetchone()[0] == 0
+        assert connection.execute("SELECT COUNT(*) FROM keyword_search").fetchone()[0] == 0
 
 
 def test_lexical_index_rejects_missing_source_chunk(tmp_path):

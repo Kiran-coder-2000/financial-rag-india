@@ -1,0 +1,4 @@
+question_id,company,category,strategy,retrieval_status,metric_status,common_subset,precision@5,latency_seconds,retrieved_count,relevant_count
+tcs_q1,TataConsultancyServices,financial_metric,baseline,completed,scored,True,0.1,0.2,5,1
+infosys_q1,Infosys,financial_metric,baseline,failed,failed,False,,0.3,0,0
+ril_q1,RelianceIndustries,risk,baseline,completed,not_evaluable,True,,0.1,0,0

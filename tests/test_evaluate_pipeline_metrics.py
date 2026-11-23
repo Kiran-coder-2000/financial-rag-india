@@ -241,7 +241,7 @@ def test_collection_variants_are_evaluated_separately():
 def test_experimental_strategy_is_passed_to_hybrid_retriever():
     variant = {
         "name": "hybrid_all",
-        "strategy": "hybrid_all",
+        "strategy": "hybrid_chunk_keyword",
         "chunk_type": "any",
     }
     case = _benchmark([variant])["cases"][0]
@@ -265,12 +265,50 @@ def test_experimental_strategy_is_passed_to_hybrid_retriever():
     retriever = FakeHybrid()
     metrics = evaluation.evaluate_variant([case], variant, retriever, candidate_k=20)
 
-    assert retriever.calls[0]["strategy"] == "hybrid_all"
+    assert retriever.calls[0]["strategy"] == "hybrid_chunk_keyword"
     assert metrics.case_diagnostics[0].candidate_counts_by_path["chunk_semantic"] == 1
     assert metrics.case_diagnostics[0].candidate_overlaps_by_path[
         "chunk_semantic|keyword_semantic"
     ] == 1
     assert metrics.case_diagnostics[0].final_candidate_ids == ["gold-text"]
+    assert metrics.case_diagnostics[0].effective_path_candidate_limits == {
+        "chunk_semantic": 20,
+        "keyword_semantic": 20,
+    }
+    assert metrics.case_diagnostics[0].strategy == "hybrid_chunk_keyword"
+    assert metrics.case_diagnostics[0].query_source == "question"
+    assert metrics.case_diagnostics[0].filters == case["filters"]
+
+
+def test_configured_path_candidate_limits_are_passed_to_hybrid():
+    variant = {
+        "name": "hybrid-limited",
+        "strategy": "hybrid_chunk_keyword",
+        "chunk_type": "any",
+        "path_candidate_limits": {"chunk_semantic": 3, "keyword_semantic": 7},
+    }
+    case = _benchmark([variant])["cases"][0]
+
+    class FakeHybrid(FakeRetriever):
+        def __init__(self):
+            super().__init__([_result("gold-text", 0.8, 1, "text")])
+            self.last_search_diagnostics = {
+                "path_candidate_counts": {"chunk_semantic": 3, "keyword_semantic": 7},
+                "path_overlap_counts": {},
+                "unique_candidate_count": 1,
+                "path_latencies_seconds": {},
+                "total_latency_seconds": 0.0,
+                "final_candidate_ids": ["gold-text"],
+            }
+
+    retriever = FakeHybrid()
+    metrics = evaluation.evaluate_variant([case], variant, retriever, candidate_k=20)
+
+    assert metrics.case_diagnostics[0].effective_path_candidate_limits == {
+        "chunk_semantic": 3,
+        "keyword_semantic": 7,
+    }
+    assert retriever.calls[0]["top_k"] == 20
 
 
 def test_verified_gold_loader_excludes_pending_candidate_ids(tmp_path):
@@ -317,6 +355,36 @@ def test_verified_gold_loader_rejects_pending_only_dataset(tmp_path):
 
     with pytest.raises(evaluation.BenchmarkError, match="no verified cases"):
         evaluation.load_verified_gold_dataset(gold_path)
+
+
+@pytest.mark.parametrize(
+    "cases",
+    [
+        [{
+            "id": "duplicate",
+            "question": "q",
+            "verification_status": "verified",
+            "relevant_chunk_ids": ["c1"],
+        }, {
+            "id": "duplicate",
+            "question": "q2",
+            "verification_status": "pending",
+            "relevant_chunk_ids": [],
+        }],
+        [{
+            "id": "unresolved",
+            "question": "q",
+            "verification_status": "verified",
+            "relevant_chunk_ids": ["does-not-exist"],
+        }],
+    ],
+)
+def test_verified_gold_loader_rejects_duplicate_or_unresolved_labels(tmp_path, cases):
+    gold_path = tmp_path / "gold.json"
+    gold_path.write_text(json.dumps({"cases": cases}), encoding="utf-8")
+
+    with pytest.raises(evaluation.BenchmarkError):
+        evaluation.load_verified_gold_dataset(gold_path, source_chunk_ids={"c1"})
 
 
 @pytest.mark.parametrize(

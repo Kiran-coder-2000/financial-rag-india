@@ -1,0 +1,2 @@
+strategy,company,query_count,scored_queries,macro_f1@5
+baseline,TataConsultancyServices,1,1,0.1

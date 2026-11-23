@@ -93,6 +93,10 @@ class CaseDiagnostics:
     latency_by_path_seconds: dict[str, float]
     total_latency_seconds: float
     final_candidate_ids: list[str]
+    strategy: str
+    query_source: str
+    filters: dict[str, str]
+    effective_path_candidate_limits: dict[str, int]
 
 
 @dataclass(frozen=True)
@@ -287,6 +291,14 @@ def evaluate_variant(
 
     query_source = variant.get("query_source", "question")
     strategy = variant.get("strategy", "baseline")
+    effective_path_limits = dict(variant.get("path_candidate_limits", {}))
+    if strategy in {"baseline", "chunk_semantic"}:
+        effective_path_limits = {"chunk_semantic": candidate_k}
+    else:
+        effective_path_limits = {
+            path_name: effective_path_limits.get(path_name, candidate_k)
+            for path_name in STRATEGY_PATHS[strategy]
+        }
     chunk_type = variant.get("chunk_type")
     if chunk_type == "any":
         chunk_type = None
@@ -360,6 +372,10 @@ def evaluate_variant(
                 else measured_latency
             ),
             final_candidate_ids=ranked_ids[:candidate_k],
+            strategy=strategy,
+            query_source=query_source,
+            filters=dict(filters),
+            effective_path_candidate_limits=effective_path_limits,
         ))
         case_latencies.append(case_diagnostics[-1].total_latency_seconds)
 
@@ -538,8 +554,12 @@ def make_hybrid_retriever_factory(
     return factory
 
 
-def load_verified_gold_dataset(path: str | Path) -> tuple[dict, int]:
-    """Adapt only explicitly verified cases; pending candidate IDs are never labels."""
+def load_verified_gold_dataset(
+    path: str | Path,
+    source_chunk_ids: set[str] | None = None,
+    return_summary: bool = False,
+):
+    """Adapt only explicitly verified cases; pending candidates are never labels."""
     path = Path(path)
     try:
         source = json.loads(path.read_text(encoding="utf-8"))
@@ -548,27 +568,72 @@ def load_verified_gold_dataset(path: str | Path) -> tuple[dict, int]:
     if not isinstance(source, dict) or not isinstance(source.get("cases"), list):
         raise BenchmarkError("Gold dataset must contain a cases array.")
 
-    verified = [case for case in source["cases"] if case.get("verification_status") == "verified"]
-    pending = sum(case.get("verification_status") == "pending" for case in source["cases"])
+    case_ids = set()
+    verified = []
+    pending = rejected = invalid = 0
+    for case in source["cases"]:
+        if not isinstance(case, dict):
+            invalid += 1
+            continue
+        case_id = case.get("id")
+        if not isinstance(case_id, str) or not case_id.strip() or case_id in case_ids:
+            if isinstance(case_id, str) and case_id in case_ids:
+                raise BenchmarkError(f"Gold dataset contains duplicate case ID {case_id!r}.")
+            invalid += 1
+            continue
+        case_ids.add(case_id)
+        status = case.get("verification_status")
+        if status == "pending":
+            pending += 1
+            continue
+        if status != "verified":
+            rejected += 1
+            continue
+        relevant_ids = case.get("relevant_chunk_ids")
+        if not isinstance(case.get("question"), str) or not case["question"].strip():
+            invalid += 1
+            continue
+        if (
+            not isinstance(relevant_ids, list)
+            or not relevant_ids
+            or len(set(relevant_ids)) != len(relevant_ids)
+            or any(not isinstance(chunk_id, str) or not chunk_id for chunk_id in relevant_ids)
+        ):
+            invalid += 1
+            continue
+        if source_chunk_ids is not None and any(
+            chunk_id not in source_chunk_ids for chunk_id in relevant_ids
+        ):
+            invalid += 1
+            continue
+        verified.append(case)
+
     if not verified:
         raise BenchmarkError(
-            f"Gold dataset contains no verified cases ({pending} pending); "
-            "candidate_relevant_chunk_ids are never used as ground truth."
+            f"Gold dataset contains no verified cases ({pending} pending, {invalid} invalid, {rejected} rejected); "
+            "candidate_relevant_chunk_ids are never ground truth."
         )
 
-    cases = []
-    for case in verified:
-        relevant_ids = case.get("relevant_chunk_ids")
-        if not isinstance(relevant_ids, list) or not relevant_ids:
-            raise BenchmarkError(f"Verified case {case.get('id')!r} needs relevant_chunk_ids.")
-        cases.append({
-            "id": case.get("id"),
-            "question": case.get("question"),
-            "filters": case.get("filters", {}),
-            "relevant_chunk_ids": relevant_ids,
-        })
-    benchmark = {"cases": cases, "variants": DEFAULT_GOLD_VARIANTS}
-    return validate_benchmark(benchmark), pending
+    benchmark = {
+        "cases": [
+            {
+                "id": case["id"],
+                "question": case["question"],
+                "filters": case.get("filters", {}),
+                "relevant_chunk_ids": case["relevant_chunk_ids"],
+            }
+            for case in verified
+        ],
+        "variants": DEFAULT_GOLD_VARIANTS,
+    }
+    validated = validate_benchmark(benchmark)
+    summary = {
+        "verified": len(verified),
+        "pending": pending,
+        "rejected": rejected,
+        "invalid": invalid,
+    }
+    return (validated, summary) if return_summary else (validated, pending)
 
 
 def format_matrix(metrics: list[VariantMetrics]) -> str:
@@ -590,6 +655,7 @@ def format_case_diagnostics(metrics: list[VariantMetrics]) -> str:
         "Variant", "Case", "Relevant", "Retrieved relevant IDs", "Missing relevant IDs",
         "First relevant rank", "P@5", "Path counts", "Path overlap", "Unique candidates",
         "Path latency (s)", "Total latency (s)", "Final candidate IDs",
+        "Strategy", "Query source", "Filters", "Path limits",
     )
     rows = []
     for metric in metrics:
@@ -611,6 +677,10 @@ def format_case_diagnostics(metrics: list[VariantMetrics]) -> str:
                 json.dumps(case.latency_by_path_seconds, sort_keys=True),
                 f"{case.total_latency_seconds:.4f}",
                 ", ".join(case.final_candidate_ids) or "-",
+                case.strategy,
+                case.query_source,
+                json.dumps(case.filters, sort_keys=True),
+                json.dumps(case.effective_path_candidate_limits, sort_keys=True),
             ))
     widths = [max(len(headers[index]), *(len(row[index]) for row in rows)) for index in range(len(headers))]
     line = "-+-".join("-" * width for width in widths)
@@ -632,10 +702,18 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         if args.gold_dataset:
-            benchmark, pending_cases = load_verified_gold_dataset(args.gold_dataset)
+            source_chunks = load_chunks_jsonl(
+                PROJECT_ROOT / "data" / "chunks" / "all_chunks.jsonl"
+            )
+            source_ids = {chunk["chunk_id"] for chunk in source_chunks}
+            benchmark, gold_summary = load_verified_gold_dataset(
+                args.gold_dataset,
+                source_chunk_ids=source_ids,
+                return_summary=True,
+            )
         else:
             benchmark = load_benchmark(args.benchmark)
-            pending_cases = 0
+            gold_summary = {"verified": len(benchmark["cases"]), "pending": 0, "rejected": 0, "invalid": 0}
         hybrid_factory = make_hybrid_retriever_factory(
             persist_directory=args.persist_directory,
             candidate_k=args.candidate_k,
@@ -657,7 +735,11 @@ def main(argv: list[str] | None = None) -> int:
     print("\nPer-case diagnostics:")
     print(format_case_diagnostics(metrics))
     print(f"\nCandidate pool per path: {args.candidate_k}")
-    print(f"Gold cases pending and excluded: {pending_cases}")
+    print(
+        "Gold case counts: "
+        f"verified={gold_summary['verified']}, pending={gold_summary['pending']}, "
+        f"rejected={gold_summary['rejected']}, invalid={gold_summary['invalid']}"
+    )
     print(f"Benchmark: {args.gold_dataset or args.benchmark}")
     return 0
 

@@ -1,0 +1,232 @@
+{
+  "dataset_version": "1.0.0",
+  "dataset_id": "financial-answer-faithfulness-v1",
+  "annotation_guidelines_version": "1.0.0",
+  "source": {
+    "question_dataset_path": "data/benchmark/retrieval_gold_dataset.json",
+    "question_dataset_sha256": "50e26ade7e058894bb1e1df2127bb8aab6782f167d8b4b9773bfc28c08fac6bd",
+    "source_dataset_version": "1.0",
+    "source_chunk_corpus_sha256": "b6af8d5df0fee1c59dcca7833e16099652b2a51f5226fab48213c9f46c3927fe"
+  },
+  "cases": [
+    {
+      "id": "infosys_consolidated_revenue_fy2026",
+      "question": "What was Infosys's consolidated revenue in FY2026?",
+      "company": "Infosys",
+      "category": "financial_metric",
+      "financial_periods": ["2025-2026"],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2025-2026"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_revenue_yoy_fy2025_fy2026",
+      "question": "How did Infosys's revenue change from FY2025 to FY2026?",
+      "company": "Infosys",
+      "category": "year_over_year_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_segment_performance_fy2024",
+      "question": "What were the main business-segment performance results reported by Infosys in FY2024?",
+      "company": "Infosys",
+      "category": "segment_performance",
+      "financial_periods": ["2023-2024"],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_profit_after_tax_fy2023",
+      "question": "What consolidated profit-after-tax figure did Infosys report for FY2023?",
+      "company": "Infosys",
+      "category": "financial_statement_figure",
+      "financial_periods": ["2022-2023"],
+      "filters": {
+        "company": "Infosys",
+        "financial_year": "2022-2023"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "infosys_revenue_and_profit_yoy_fy2025_fy2026",
+      "question": "What evidence compares Infosys's revenue and profit between FY2025 and FY2026?",
+      "company": "Infosys",
+      "category": "multi_evidence_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "Infosys"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tataconsultancyservices_consolidated_revenue_fy2026",
+      "question": "What was TCS's consolidated revenue in FY2026?",
+      "company": "TataConsultancyServices",
+      "category": "financial_metric",
+      "financial_periods": ["2025-2026"],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2025-2026"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tataconsultancyservices_revenue_yoy_fy2025_fy2026",
+      "question": "How did TCS's revenue change from FY2025 to FY2026?",
+      "company": "TataConsultancyServices",
+      "category": "year_over_year_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tataconsultancyservices_segment_performance_fy2024",
+      "question": "What were the main business-segment performance results reported by TCS in FY2024?",
+      "company": "TataConsultancyServices",
+      "category": "segment_performance",
+      "financial_periods": ["2023-2024"],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tataconsultancyservices_profit_after_tax_fy2023",
+      "question": "What consolidated profit-after-tax figure did TCS report for FY2023?",
+      "company": "TataConsultancyServices",
+      "category": "financial_statement_figure",
+      "financial_periods": ["2022-2023"],
+      "filters": {
+        "company": "TataConsultancyServices",
+        "financial_year": "2022-2023"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "tataconsultancyservices_revenue_and_profit_yoy_fy2025_fy2026",
+      "question": "What evidence compares TCS's revenue and profit between FY2025 and FY2026?",
+      "company": "TataConsultancyServices",
+      "category": "multi_evidence_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "TataConsultancyServices"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "relianceindustries_consolidated_revenue_fy2026",
+      "question": "What was Reliance Industries's consolidated revenue in FY2026?",
+      "company": "RelianceIndustries",
+      "category": "financial_metric",
+      "financial_periods": ["2025-2026"],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2025-2026"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "relianceindustries_revenue_yoy_fy2025_fy2026",
+      "question": "How did Reliance Industries's revenue change from FY2025 to FY2026?",
+      "company": "RelianceIndustries",
+      "category": "year_over_year_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "relianceindustries_segment_performance_fy2024",
+      "question": "What were the main business-segment performance results reported by Reliance Industries in FY2024?",
+      "company": "RelianceIndustries",
+      "category": "segment_performance",
+      "financial_periods": ["2023-2024"],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2023-2024"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "relianceindustries_profit_after_tax_fy2023",
+      "question": "What consolidated profit-after-tax figure did Reliance Industries report for FY2023?",
+      "company": "RelianceIndustries",
+      "category": "financial_statement_figure",
+      "financial_periods": ["2022-2023"],
+      "filters": {
+        "company": "RelianceIndustries",
+        "financial_year": "2022-2023"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    },
+    {
+      "id": "relianceindustries_revenue_and_profit_yoy_fy2025_fy2026",
+      "question": "What evidence compares Reliance Industries's revenue and profit between FY2025 and FY2026?",
+      "company": "RelianceIndustries",
+      "category": "multi_evidence_comparison",
+      "financial_periods": ["2024-2025", "2025-2026"],
+      "filters": {
+        "company": "RelianceIndustries"
+      },
+      "review_status": "pending",
+      "unverified_candidate_chunk_ids": [],
+      "gold": null,
+      "answer_reviews": []
+    }
+  ]
+}

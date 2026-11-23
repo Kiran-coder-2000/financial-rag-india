@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="478" viewBox="0 0 980 478">
+<style>text{font-family:Segoe UI,Arial,sans-serif;fill:#222}.title{font-size:20px;font-weight:600}.label{font-size:13px}.value{font-size:12px}.axis{stroke:#aaa;stroke-width:1}</style>
+<text class="title" x="20" y="30">Provisional retrieval metrics (macro average)</text>
+<text class="label" x="250" y="58">0</text>
+<text class="label" x="490" y="58">1.0</text>
+<text class="label" x="545" y="58">Recall@5</text>
+<text class="label" x="690" y="58">MRR</text>
+<line class="axis" x1="250" y1="64" x2="250" y2="463"/>
+<text class="label" x="20" y="100">baseline</text>
+<rect x="250" y="85" width="31.86" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="99">0.127</text>
+<rect x="645" y="85" width="41.36" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="99">0.165</text>
+<text class="label" x="20" y="154">chunk_semantic</text>
+<rect x="250" y="139" width="31.86" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="153">0.127</text>
+<rect x="645" y="139" width="41.36" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="153">0.165</text>
+<text class="label" x="20" y="208">hybrid_all</text>
+<rect x="250" y="193" width="17.10" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="207">0.068</text>
+<rect x="645" y="193" width="11.08" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="207">0.044</text>
+<text class="label" x="20" y="262">hybrid_chunk_keyword</text>
+<rect x="250" y="247" width="17.10" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="261">0.068</text>
+<rect x="645" y="247" width="19.49" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="261">0.078</text>
+<text class="label" x="20" y="316">hybrid_chunk_lexical</text>
+<rect x="250" y="301" width="17.10" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="315">0.068</text>
+<rect x="645" y="301" width="19.49" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="315">0.078</text>
+<text class="label" x="20" y="370">keyword_lexical</text>
+<rect x="250" y="355" width="0.00" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="369">0.000</text>
+<rect x="645" y="355" width="0.00" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="369">0.000</text>
+<text class="label" x="20" y="424">keyword_semantic</text>
+<rect x="250" y="409" width="0.00" height="18" fill="#2c7fb8"/>
+<text class="value" x="510" y="423">0.000</text>
+<rect x="645" y="409" width="0.00" height="18" fill="#41ab5d"/>
+<text class="value" x="895" y="423">0.000</text>
+</svg>

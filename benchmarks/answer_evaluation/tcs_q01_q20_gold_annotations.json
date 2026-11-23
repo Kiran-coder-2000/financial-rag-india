@@ -1,0 +1,989 @@
+{
+  "draft_version": "1.0.0",
+  "status": "proposed_pending_human_review",
+  "source_benchmark": "financial_rag_60_question_benchmark.json",
+  "source_benchmark_sha256": "1a60f5e235eec5ac24ff8f2bc28c706256a5d6e6ba7de4bce56f520cf79cd0fa",
+  "company": "TataConsultancyServices",
+  "case_count": 20,
+  "evidence_status_note": "All evidence references are proposed and unverified. No reviewer identity is assigned. These annotations are not authoritative gold.",
+  "cases": [
+    {
+      "id": "tcs_q01",
+      "question": "What was TCS consolidated revenue from operations for FY2024, in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The FY2024 consolidated statement directly reports the requested Revenue from operations line. Do not substitute Total income.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q01_a1",
+            "proposition": "TCS consolidated revenue from operations for FY2024 was INR 240,893 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore: row 'Revenue from operations' reports 2,40,893. The same statement reports Total income of 2,45,315 as a distinct line."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from operations",
+              "value": "240893",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q02",
+      "question": "What was TCS consolidated profit after tax for FY2024, in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the consolidated 'PROFIT FOR THE YEAR' total, which includes both shareholders' and non-controlling interests' shares. Do not use shareholders' share alone as consolidated PAT.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q02_a1",
+            "proposition": "TCS consolidated profit for the year, representing consolidated profit after tax, was INR 46,099 crore in FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore: 'PROFIT FOR THE YEAR' is 46,099."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Profit for the year (consolidated PAT)",
+              "value": "46099",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q02_a2",
+            "proposition": "Of FY2024 consolidated profit for the year, INR 45,908 crore was attributable to shareholders and INR 191 crore to non-controlling interests.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore: attribution rows report 45,908 for shareholders and 191 for non-controlling interests; they sum to 46,099."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q03",
+      "question": "What operating margin did TCS report for FY2024, and what qualification did it provide regarding the settlement of a legal claim?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report states the FY2024 operating margin and qualifies it as excluding the legal-claim settlement. Preserve that qualification; the settlement is separately disclosed in the consolidated statement.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q03_a1",
+            "proposition": "TCS reported an FY2024 operating margin of 24.6%, excluding settlement of a legal claim.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.6, reports an operating margin of 24.6% and states that it excludes settlement of a legal claim."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p075_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.75 provides the operating-performance discussion and legal-claim qualification in its annual-analysis context."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.181, consolidated Statement of Profit and Loss, separately presents the legal-claim settlement line as INR 958 crore; this amount is not a margin value."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Operating margin",
+              "value": "24.6",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "unspecified",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q04",
+      "question": "What total contract value (TCV) of new deals did TCS report for FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The FY2024 letter reports TCV of US$42.7 billion. The glossary maps Order Book to Total Contract Value and defines TCV as the aggregate value of contracts signed during a period; preserve the report's terminology.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q04_a1",
+            "proposition": "TCS reported FY2024 total contract value (TCV) of US$42.7 billion.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.8, states 'TCV of US$ 42.7 billion' for the year."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p313_t408",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.313 glossary: 'Order Book — See Total Contract Value.' This supports the terminology mapping, not a separate unrounded value."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p314_t409",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.314 glossary defines Total Contract Value as the aggregation of contract values signed during a period."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Total contract value (TCV)",
+              "value": "42.7",
+              "currency": "USD",
+              "unit": "currency",
+              "scale": "billion",
+              "entity_scope": "unspecified",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q05",
+      "question": "What was the year-over-year percentage change in TCS consolidated profit after tax from FY2023 to FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The consolidated statement reports profit for the year of INR 42,303 crore in FY2023 and INR 46,099 crore in FY2024. The increase is INR 3,796 crore; (46,099 - 42,303) / 42,303 x 100 = 8.973358...%, rounded to 9.0% at one decimal.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q05_a1",
+            "proposition": "Consolidated profit for the year was INR 42,303 crore in FY2023 and INR 46,099 crore in FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore, presents FY2024 and FY2023 comparative 'PROFIT FOR THE YEAR' values 46,099 and 42,303."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q05_a2",
+            "proposition": "Consolidated profit after tax increased by INR 3,796 crore, approximately 9.0% year over year from FY2023 to FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.181 supports the two consolidated profit-for-the-year inputs. Calculation: 46,099 - 42,303 = 3,796; 3,796 / 42,303 x 100 = 8.973358...%, rounded to 9.0%."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Year-over-year growth in consolidated profit for the year",
+              "value": "9.0",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q06",
+      "question": "How did TCS annual deal TCV change between FY2023 and FY2024, in value and percentage terms?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "The corpus reports a FY2023 closing order book of US$34.1 billion and FY2024 TCV of US$42.7 billion, and the FY2024 glossary cross-references Order Book to Total Contract Value. However, the available evidence does not establish that the FY2023 closing order-book balance and FY2024 TCV signed during a period are comparable values for calculating a change. Do not claim an absolute or percentage increase.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q06_a1",
+            "proposition": "TCS reported a FY2023 closing order book of US$34.1 billion and FY2024 TCV of US$42.7 billion.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2023_txt_p011_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2022-23 Annual Report, printed p.11, states that TCS 'closed the year with an order book of $34.1 Bn'."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.8, reports TCV of US$42.7 billion."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p313_t408",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "FY2023-24 glossary, printed p.313, cross-references Order Book to Total Contract Value."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p314_t409",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "FY2023-24 glossary, printed p.314, defines TCV as the aggregate value of contracts signed during a period. The definition does not establish that the FY2023 closing order-book balance and FY2024 period TCV are comparable for a change calculation."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q07",
+      "question": "What was TCS consolidated revenue from operations in FY2023 and FY2024, and what was its absolute year-over-year change in INR crore?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The FY2024 consolidated statement presents both comparative annual values on the same Revenue from operations line. The absolute increase is INR 15,435 crore.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q07_a1",
+            "proposition": "Consolidated revenue from operations was INR 225,458 crore in FY2023 and INR 240,893 crore in FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore, gives comparative Revenue from operations values 2,25,458 (FY2023) and 2,40,893 (FY2024)."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q07_a2",
+            "proposition": "Consolidated revenue from operations increased by INR 15,435 crore year over year from FY2023 to FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.181 supplies both comparative values on the same line. Calculation: 240,893 - 225,458 = 15,435 crore."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Absolute year-over-year change in consolidated revenue from operations",
+              "value": "15435",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q08",
+      "question": "What was TCS FY2024 revenue growth compared with FY2023, and was it stated in constant-currency or reported-currency terms?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The annual report gives both reported-currency and constant-currency revenue growth. Do not present one basis as the other. The reported-currency result is also consistent with the consolidated revenue values after rounding.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q08_a1",
+            "proposition": "TCS FY2024 revenue growth was 6.8% in reported-currency terms and 3.4% in constant-currency terms.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.8, states reported-currency and constant-currency revenue growth of 6.8% and 3.4%, respectively."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p075_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.75 provides the FY2024 revenue-growth analysis and distinguishes constant-currency performance from currency impact."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q08_a2",
+            "proposition": "Using consolidated revenue from operations, the calculated FY2024 year-over-year growth is approximately 6.8461%, which rounds to 6.8% at one decimal.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.181 gives consolidated revenue from operations of INR 225,458 crore in FY2023 and INR 240,893 crore in FY2024. Calculation: (240,893 - 225,458) / 225,458 x 100 = 6.846064...%; this arithmetic check is not a replacement for the report's stated currency basis."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Calculated growth in consolidated revenue from operations",
+              "value": "6.8461",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q09",
+      "question": "Which category in TCS's FY2024 Industry Vertical table recorded the highest year-over-year revenue growth, including the Others category, and what was its reported-currency growth rate?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The complete annual Industry Vertical comparison, including Others, shows Others at the highest reported growth rate. The report identifies the growth rates as year over year in reported currency.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q09_a1",
+            "proposition": "Others recorded the highest FY2024 year-over-year Industry Vertical revenue growth at 14.5% in reported-currency terms.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p076_t041",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.76, Industry Vertical table gives Others growth of 14.5% and the other vertical results, including BFSI at 5.6%."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p077_t042",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.77 continues the Industry Vertical table and supports comparison across all categories."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p078_t043",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.78 completes the Industry Vertical table; the full table is needed to establish the maximum including Others."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.8 identifies the reported-currency year-over-year basis for the vertical growth rates."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "FY2024 year-over-year revenue growth for Others Industry Vertical",
+              "value": "14.5",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q10",
+      "question": "What year-over-year revenue growth or decline did TCS report for its BFSI vertical in FY2024?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The annual Industry Vertical table reports BFSI growth of 5.6% year over year in reported currency. Its displayed revenues also independently reproduce that rounded rate: (90,928 - 86,127) / 86,127 x 100 = 5.5743...%, which rounds to 5.6%.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q10_a1",
+            "proposition": "TCS's BFSI vertical reported FY2024 year-over-year revenue growth of 5.6% in reported-currency terms.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p076_t041",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.76, Industry Vertical annual table reports BFSI growth of 5.6%; the row gives revenue of INR 86,127 crore for FY2023 and INR 90,928 crore for FY2024."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.8 identifies the vertical growth rates as year over year in reported currency."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "FY2024 year-over-year revenue growth for BFSI vertical",
+              "value": "5.6",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "segment",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q11",
+      "question": "Which geographic market had the highest reported revenue growth for TCS in FY2024, and what was the rate?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The annual report's geographic growth comparison identifies Latin America as highest. The reported-currency qualifier and year-over-year basis are explicit; do not confuse growth with revenue share.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q11_a1",
+            "proposition": "Latin America had the highest listed FY2024 geographic revenue growth at 21.1% year over year in reported currency.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.8, states Latin America grew 21.1%, India 20.3%, Middle East & Africa 14.8%, UK 17.7%, Continental Europe 6.5%, Asia Pacific 4.0%, and North America 2.3%, YoY in reported currency."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "FY2024 year-over-year geographic revenue growth for Latin America",
+              "value": "21.1",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "unspecified",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q12",
+      "question": "Compare TCS FY2024 operating margin with Infosys FY2024 operating margin. Which was higher, and what comparability caveat should be checked?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The reports state TCS at 24.6% and Infosys at 20.7%, a 3.9 percentage-point difference. TCS's reported margin excludes settlement of a legal claim; check the two companies' definitions, scope, and adjustments before treating the comparison as strictly like-for-like.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q12_a1",
+            "proposition": "TCS reported FY2024 operating margin of 24.6%, while Infosys reported FY2024 operating margin of 20.7%; the TCS reported figure is higher by 3.9 percentage points.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "TCS FY2023-24 Annual Report, printed p.6, reports operating margin of 24.6% and notes exclusion of legal-claim settlement."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Infosys FY2023-24 Annual Report, printed p.15, reports operating margin of 20.7%."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Difference between reported FY2024 operating margins",
+              "value": "3.9",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "unspecified",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q12_a2",
+            "proposition": "A like-for-like comparison should verify the companies' margin definitions, scope, and adjustments; TCS's FY2024 disclosure specifically excludes legal-claim settlement.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "TCS FY2023-24 Annual Report, printed p.6, qualifies its margin by excluding the legal-claim settlement."
+              },
+              {
+                "chunk_id": "annualreport_infosys_2024_txt_p015_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Infosys FY2023-24 Annual Report, printed p.15, reports its operating-margin figure; definitions and adjustment bases must be checked rather than assumed identical."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q13",
+      "question": "Did TCS annual deal TCV or consolidated profit after tax grow faster from FY2023 to FY2024? Show both calculations.",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "The consolidated PAT figures support a year-over-year growth calculation of (46,099 - 42,303) / 42,303 x 100 = 8.9733...%, approximately 9.0%. The deal disclosures provide FY2023 closing order book of US$34.1 billion and FY2024 TCV of US$42.7 billion, but the glossary cross-reference does not establish that these differently timed disclosures are comparable values for calculating deal-measure growth. The available evidence therefore does not establish which measure grew faster.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q13_a1",
+            "proposition": "TCS reported a FY2023 closing order book of US$34.1 billion and a FY2024 TCV of US$42.7 billion; the available evidence does not establish that these amounts are comparable values for calculating growth.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2023_txt_p011_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2022-23 Annual Report, printed p.11, reports closing order book of US$34.1 billion."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.8, reports TCV of US$42.7 billion for FY2024. The FY2024 glossary defines TCV as contract value signed during a period but does not establish comparability with the FY2023 closing order-book balance."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p313_t408",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "FY2023-24 Annual Report, printed p.313, cross-references Order Book to Total Contract Value."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p314_t409",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.314 defines TCV as the aggregate contract value signed during a period. Retain the distinct source labels and use only the displayed rounded amounts."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q13_a2",
+            "proposition": "Consolidated profit for the year increased from INR 42,303 crore in FY2023 to INR 46,099 crore in FY2024, approximately 9.0% year over year.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore, presents FY2023/FY2024 profit-for-the-year comparatives of 42,303/46,099, including non-controlling interests. Increase = 3,796; 3,796 / 42,303 x 100 = 8.9733...%, approximately 9.0%."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Year-over-year growth in consolidated profit for the year",
+              "value": "9.0",
+              "currency": null,
+              "unit": "percent",
+              "scale": "ones",
+              "entity_scope": "consolidated",
+              "period": null
+            },
+            "temporal_reference": {
+              "periods": ["2022-2023", "2023-2024"],
+              "comparison_basis": "year_over_year",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q14",
+      "question": "TCS reported an operating margin of 24.6% for FY2024 and 26% for Q4 FY2024. What do these annual and quarter-specific figures establish, and why do they not by themselves establish employee-cost efficiency?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The disclosures establish the two margin figures for different reporting periods. A margin percentage alone does not isolate employee costs or establish a causal efficiency claim; do not infer employee-cost efficiency from these figures.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q14_a1",
+            "proposition": "TCS reported an operating margin of 24.6% for FY2024 and 26% for Q4 FY2024.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.6, reports the FY2024 full-year operating margin of 24.6%."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.8 reports Q4 FY2024 operating margin of 26%."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024", "FY2024-Q4"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q14_a2",
+            "proposition": "The annual and Q4 operating-margin figures do not by themselves establish employee-cost efficiency because they do not isolate employee costs or show that employee costs caused the margin result.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.6 reports a full-year margin ratio; it does not attribute that ratio to employee costs."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.8 reports a quarter-specific margin ratio; it does not isolate employee-cost efficiency or establish causation."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024", "FY2024-Q4"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q15",
+      "question": "Does the indexed TCS corpus establish FY2010 consolidated revenue from operations specifically? If it contains only a differently labelled or scoped historical revenue figure, identify that limitation rather than treating it as the requested metric.",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "partial",
+        "action_rationale": "The indexed corpus includes an FY2010 historical figure labeled Total revenue in a table whose heading identifies Indian GAAP consolidated scope. The indexed chunk reports INR 30,028.9 crore (the original report prints INR 30,028.92 crore), but it does not label the figure Revenue from operations. The exact requested metric is therefore not established; state the adjacent measure only with that limitation.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q15_a1",
+            "proposition": "The FY2014-15 Annual Report's Indian GAAP consolidated performance-summary table reports FY2010 Total revenue of INR 30,028.9 crore in the indexed chunk; the original report prints INR 30,028.92 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2015_p083_t055_c01",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "The chunk is in the TCS FY2014-15 per-document file and all_chunks.jsonl. It has indexed page 83; the source PDF table is on printed p.81. The table heading specifies Indian GAAP consolidated scope, context gives INR crore, and the Fiscal 2010 row is labeled 'Total revenue' with indexed value 30,028.9; the PDF prints 30,028.92."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Total revenue (not specifically revenue from operations)",
+              "value": "30028.9",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2009-2010"
+            },
+            "temporal_reference": {
+              "periods": ["2009-2010"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q16",
+      "question": "Does the indexed TCS FY2024 corpus provide revenue amounts attributable to each individual customer? If not, state that the corpus does not establish a customer-by-customer breakdown.",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "abstain",
+        "action_rationale": "The indexed FY2024 TCS Annual Report chunks were searched for individual-customer revenue, customer-wise and revenue-by-customer breakdowns; no customer-specific revenue amounts were located. This is limited to the indexed corpus and does not establish that TCS never disclosed such information elsewhere.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "tcs_q17",
+      "question": "How should TCS FY2024 full-year operating margin be reconciled with its Q4 FY2024 operating margin? Are they contradictory or different-period measures?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "The report gives 24.6% for the full fiscal year and 26% for Q4 alone. These are different-period measures, not contradictory values or interchangeable rates.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q17_a1",
+            "proposition": "TCS FY2024 full-year operating margin was 24.6%, while Q4 FY2024 operating margin was 26%; they are different-period measures and are not contradictory.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p006_0002",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.6, reports the 24.6% full-year operating margin."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_txt_p008_0001",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.8 reports the 26% Q4 operating margin. The respective passages explicitly distinguish the full year from Q4."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024", "FY2024-Q4"],
+              "comparison_basis": "other",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q18",
+      "question": "If TCS annual report lists revenue from operations and total income separately, which figure answers a question specifically asking for revenue from operations, and why?",
+      "candidate_expected_action": "answer",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "answer",
+        "action_rationale": "Use the consolidated statement's specifically labeled Revenue from operations figure. Total income is a distinct line that includes other income; it is not interchangeable with the requested revenue measure.",
+        "expected_assertions": [
+          {
+            "assertion_id": "tcs_q18_a1",
+            "proposition": "For FY2024 consolidated results, revenue from operations was INR 240,893 crore; total income was INR 245,315 crore and other income was INR 4,422 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "FY2023-24 Annual Report, printed p.181, consolidated Statement of Profit and Loss, INR crore, labels Revenue from operations as 2,40,893 and Total income as 2,45,315."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p055_t027",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.55 financial-performance table separately reports revenue from operations, other income of INR 4,422 crore, and total income; this makes the line-item distinction explicit."
+              }
+            ],
+            "numerical_reference": null,
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          },
+          {
+            "assertion_id": "tcs_q18_a2",
+            "proposition": "A question specifically asking for revenue from operations should be answered with INR 240,893 crore, not total income of INR 245,315 crore.",
+            "evidence": [
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p181_t165",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "supports",
+                "rationale": "Printed p.181 presents distinct labeled rows for Revenue from operations and Total income in the consolidated statement."
+              },
+              {
+                "chunk_id": "annualreport_tataconsultancyservices_2024_p055_t027",
+                "verification_status": "proposed_unverified",
+                "verified_by": null,
+                "relation": "context_only",
+                "rationale": "Printed p.55 separately presents other income of INR 4,422 crore and total income, showing why total income is not the requested revenue line."
+              }
+            ],
+            "numerical_reference": {
+              "metric": "Revenue from operations",
+              "value": "240893",
+              "currency": "INR",
+              "unit": "currency",
+              "scale": "crore",
+              "entity_scope": "consolidated",
+              "period": "2023-2024"
+            },
+            "temporal_reference": {
+              "periods": ["2023-2024"],
+              "comparison_basis": "single_period",
+              "temporal_scope": "historical"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "tcs_q19",
+      "question": "What is TCS share price on NSE right now, and what is its percentage change today?",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed TCS corpus consists of annual-report material and does not contain a live NSE quote or current-day price-change feed. Current market information is unavailable from this corpus; do not present historical report data as live.",
+        "expected_assertions": []
+      }
+    },
+    {
+      "id": "tcs_q20",
+      "question": "Why is TCS share price moving today? Identify the latest verified event or market driver.",
+      "candidate_expected_action": "abstain",
+      "candidate_expected_action_status": "unverified",
+      "proposed_gold": {
+        "expected_action": "current_information_unavailable",
+        "action_rationale": "The indexed TCS Annual Reports do not provide current news or a live market feed to verify today's price movement or its driver. Do not infer a current cause from historical annual-report information.",
+        "expected_assertions": []
+      }
+    }
+  ]
+}
